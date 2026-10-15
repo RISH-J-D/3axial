@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Design tokens
+   Typeface system: Inter Tight (display), Inter (text), IBM Plex Mono (technical labels)
+   Palette: taken directly from the 3 Axial logo — blue (#1270F9), orange (#F47106), green (#28A44A) on white
+------------------------------------------------------------------- */
+@theme {
+  --font-display: 'Inter Tight', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-ink: #14213D;
+  --color-logo: #1270F9;
+  --color-brand: #0E63E0;
+  --color-brand-dark: #0A52BC;
+  --color-accent: #F47106;
+  --color-accent-dark: #C45500;
+  --color-accent-deeper: #A84900;
+  --color-accent-tint: #FFF2E6;
+  --color-green: #28A44A;
+  --color-green-dark: #1B8038;
+  --color-green-deeper: #156B2E;
+  --color-green-tint: #EAF7EE;
+  --color-muted: #5A6578;
+  --color-line: #E4E7EC;
+  --color-surface: #F6F7F9;
+  --color-tint: #EEF4FD;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  html,
+  body {
+    overflow-x: clip;
+  }
+  body {
+    background-color: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    color: inherit;
+  }
+  ::selection {
+    background: var(--color-brand);
+    color: #fff;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1280px] px-5 sm:px-8 lg:px-10;
+  }
+  .section {
+    @apply py-20 lg:py-28;
+  }
+
+  /* Section label: thin orange rule + mono uppercase */
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-brand;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply block h-[2px] w-6 bg-green;
+  }
+  .eyebrow-light {
+    @apply text-white/85;
+  }
+  .eyebrow-light::before {
+    @apply bg-accent;
+  }
+
+  .h-section {
+    @apply font-display text-[32px] font-semibold leading-[1.1] tracking-[-0.025em] text-ink sm:text-[40px] lg:text-[46px];
+  }
+  .lead {
+    @apply text-[17px] leading-[1.7] text-muted;
+  }
+
+  /* Buttons — squared, quiet, confident (base lives in @utility btn below) */
+  .btn-primary {
+    @apply btn border-2 border-brand bg-brand text-white shadow-[0_8px_20px_-8px_rgba(14,99,224,0.65)] hover:border-brand-dark hover:bg-brand-dark hover:shadow-[0_12px_26px_-8px_rgba(14,99,224,0.75)];
+  }
+  .btn-light {
+    @apply btn border-2 border-white bg-white text-brand shadow-sm hover:bg-tint;
+  }
+  .btn-accent {
+    @apply btn border-2 border-accent-dark bg-accent-dark text-white shadow-[0_8px_20px_-8px_rgba(244,113,6,0.7)] hover:border-accent-deeper hover:bg-accent-deeper hover:shadow-[0_12px_26px_-8px_rgba(244,113,6,0.8)];
+  }
+  .btn-green {
+    @apply btn border-2 border-green-dark bg-green-dark text-white shadow-[0_8px_20px_-8px_rgba(40,164,74,0.7)] hover:border-green-deeper hover:bg-green-deeper hover:shadow-[0_12px_26px_-8px_rgba(40,164,74,0.8)];
+  }
+  .btn-outline-green {
+    @apply btn border-2 border-green-dark bg-white text-green-dark shadow-[0_4px_12px_-6px_rgba(40,164,74,0.35)] hover:bg-green-dark hover:text-white;
+  }
+  .btn-outline-accent {
+    @apply btn border-2 border-accent-dark bg-white text-accent-dark shadow-[0_4px_12px_-6px_rgba(244,113,6,0.35)] hover:bg-accent-dark hover:text-white;
+  }
+
+  /* Three-colour stripe taken from the logo */
+  .logo-stripe {
+    background: linear-gradient(90deg, var(--color-logo) 0 33.34%, var(--color-accent) 33.34% 66.67%, var(--color-green) 66.67% 100%);
+  }
+  .eyebrow-orange {
+    @apply text-accent-dark;
+  }
+  .eyebrow-orange::before {
+    @apply bg-logo;
+  }
+  .eyebrow-green {
+    @apply text-green-dark;
+  }
+  .eyebrow-green::before {
+    @apply bg-accent;
+  }
+  .btn-outline {
+    @apply btn border-2 border-brand bg-white text-brand shadow-[0_4px_12px_-6px_rgba(14,99,224,0.35)] hover:bg-brand hover:text-white hover:shadow-[0_10px_22px_-8px_rgba(14,99,224,0.6)];
+  }
+  .btn-outline-light {
+    @apply btn border border-white/55 text-white hover:border-white hover:bg-white hover:text-brand;
+  }
+  .btn-sm {
+    @apply h-11 px-5 text-[14px];
+  }
+
+  /* Secondary in-content action: tinted button with arrow */
+  .link-arrow {
+    @apply btn h-11 border-2 border-brand/25 bg-tint px-5 text-brand hover:border-brand hover:bg-brand hover:text-white;
+  }
+
+  /* Forms */
+  .field-label {
+    @apply mb-2 block text-[12px] font-medium tracking-[0.02em] text-ink/75;
+  }
+  .field {
+    @apply h-12 w-full rounded-[2px] border border-line bg-white px-4 text-[15px] text-ink placeholder:text-ink/35 transition-colors focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/15;
+  }
+  textarea.field {
+    @apply h-auto py-3;
+  }
+
+  /* Filter tabs */
+  .tab {
+    @apply relative -mb-px border-b-2 border-transparent px-1 pb-3 text-[14px] font-medium text-muted transition-colors hover:text-ink;
+  }
+  .tab-active {
+    @apply border-brand text-ink;
+  }
+
+  /* Modal shell */
+  .modal-backdrop {
+    @apply fixed inset-0 z-[100] flex items-center justify-center bg-ink/55 p-4 backdrop-blur-[2px] animate-fadeIn;
+  }
+  .modal-panel {
+    @apply w-full overflow-hidden rounded-[2px] bg-white shadow-[0_30px_80px_-20px_rgba(14,99,224,0.35)];
+  }
+}
+
+@utility btn {
+  @apply inline-flex h-[52px] items-center justify-center gap-2.5 rounded-[4px] px-7 text-[15px] font-semibold tracking-[0.005em] whitespace-nowrap transition-all duration-200 hover:-translate-y-px active:translate-y-0 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/25 disabled:pointer-events-none disabled:opacity-60;
+}
+
+/* Arrow/icon in any button nudges on hover */
+[class*='btn'] svg,
+.link-arrow svg {
+  transition: transform 0.2s ease;
+}
+[class*='btn']:hover svg:last-child,
+.link-arrow:hover svg:last-child {
+  transform: translateX(3px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@utility animate-fadeIn {
+  animation: fadeIn 0.25s ease-out both;
+}
+@utility animate-bounceIn {
+  animation: fadeIn 0.3s ease-out both;
+}
