@@ -6,7 +6,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'The Cays Building',
     category: 'completed',
     sector: 'commercial',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/The-Cays-Buliding.jpg',
+    image: '/uploads/2025/07/The-Cays-Buliding.jpg',
     location: 'North America',
     tonnage: '1,200 Tons',
     description: 'Complex multi-story commercial steel framing with high-spec canopy connections.'
@@ -16,7 +16,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Graymont Industrial Facility',
     category: 'completed',
     sector: 'industrial',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Graymont.jpg',
+    image: '/uploads/2025/07/Graymont.jpg',
     location: 'USA',
     tonnage: '2,400 Tons',
     description: 'Heavy industrial lime processing plant steel detailing with pipe racks and hoppers.'
@@ -26,7 +26,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Bryn Mawr Substation',
     category: 'completed',
     sector: 'infrastructure',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Bryn-Mawr-Substation.jpg',
+    image: '/uploads/2025/07/Bryn-Mawr-Substation.jpg',
     location: 'Pennsylvania, USA',
     tonnage: '850 Tons',
     description: 'High-voltage electrical substation support framing and equipment gantries.'
@@ -36,7 +36,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Lethbridge Housing Complex',
     category: 'completed',
     sector: 'commercial',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Lethbridge-Housing.jpg',
+    image: '/uploads/2025/07/Lethbridge-Housing.jpg',
     location: 'Alberta, Canada',
     tonnage: '950 Tons',
     description: 'Multi-family residential steel structure with architectural balconies and stair towers.'
@@ -46,7 +46,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'CSSPI Ecole Francois La Bernarde',
     category: 'completed',
     sector: 'educational',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/CSSPI-Ecole-Francois-La-Bernarde.jpg',
+    image: '/uploads/2025/07/CSSPI-Ecole-Francois-La-Bernarde.jpg',
     location: 'Quebec, Canada',
     tonnage: '1,100 Tons',
     description: 'Educational facility featuring wide-span roof trusses and gymnasium framing.'
@@ -56,7 +56,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Tokai Carbon Facility Phase 02',
     category: 'completed',
     sector: 'industrial',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Tokai-Carbon-Project-02.jpg',
+    image: '/uploads/2025/07/Tokai-Carbon-Project-02.jpg',
     location: 'USA',
     tonnage: '3,100 Tons',
     description: 'Carbon black processing mill with heavy ductwork and structural tower frames.'
@@ -66,7 +66,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Oklahoma Children Hospital',
     category: 'completed',
     sector: 'infrastructure',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Oklahoma-Children-Hospital.jpg',
+    image: '/uploads/2025/07/Oklahoma-Children-Hospital.jpg',
     location: 'Oklahoma, USA',
     tonnage: '1,800 Tons',
     description: 'Healthcare facility steel detailing adhering to seismic resistance standards.'
@@ -76,7 +76,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Industrial Process Facility Phase II',
     category: 'completed',
     sector: 'industrial',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Industrial-Process-Facility.jpg',
+    image: '/uploads/2025/07/Industrial-Process-Facility.jpg',
     location: 'Texas, USA',
     tonnage: '4,200 Tons',
     description: 'Chemical process building with platform walkways, handrails, and vessel supports.'
@@ -86,7 +86,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'St. Clair College Welcome Centre',
     category: 'completed',
     sector: 'educational',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/St.-Clair-College-Welcome-Centre.jpg',
+    image: '/uploads/2025/07/St.-Clair-College-Welcome-Centre.jpg',
     location: 'Ontario, Canada',
     tonnage: '780 Tons',
     description: 'Architectural entrance atrium framing with exposed structural steel.'
@@ -96,7 +96,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Concrete Batching Factory',
     category: 'completed',
     sector: 'industrial',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Concrete-Factory.jpg',
+    image: '/uploads/2025/07/Concrete-Factory.jpg',
     location: 'USA',
     tonnage: '1,650 Tons',
     description: 'Heavy aggregate handling conveyor gantries and silo support structures.'
@@ -106,7 +106,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'The Wynkoop Plaza',
     category: 'completed',
     sector: 'commercial',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/The-Wynkoop-2.jpg',
+    image: '/uploads/2025/07/The-Wynkoop-2.jpg',
     location: 'Colorado, USA',
     tonnage: '1,450 Tons',
     description: 'Commercial office development with glass curtain wall structural backings.'
@@ -116,7 +116,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Redbud Elementary School',
     category: 'completed',
     sector: 'educational',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Redbud-Elementary.jpg',
+    image: '/uploads/2025/07/Redbud-Elementary.jpg',
     location: 'USA',
     tonnage: '890 Tons',
     description: 'Primary school facility detailing joist and deck layouts with cafeteria framing.'
@@ -126,7 +126,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Sulphur PS Gym Auditorium',
     category: 'completed',
     sector: 'educational',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Sulphur-PS-Gym-Auditorium.jpg',
+    image: '/uploads/2025/07/Sulphur-PS-Gym-Auditorium.jpg',
     location: 'Louisiana, USA',
     tonnage: '1,050 Tons',
     description: 'Long-span roof joist systems and catwalk structures for high school auditorium.'
@@ -136,7 +136,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Miller Industries Expansion',
     category: 'completed',
     sector: 'industrial',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Miller_Industries1.jpg',
+    image: '/uploads/2025/07/Miller_Industries1.jpg',
     location: 'Tennessee, USA',
     tonnage: '2,800 Tons',
     description: 'Manufacturing facility expansion with overhead crane runway girders.'
@@ -146,7 +146,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'The Campbell Bldg. B',
     category: 'ongoing',
     sector: 'commercial',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/The-Campbell-Bldg.jpg',
+    image: '/blueprint-bg.jpg',
     location: 'USA',
     tonnage: '1,600 Tons',
     description: 'Ongoing commercial office building detailing under AISC 360-16 specifications.'
@@ -156,7 +156,7 @@ export const PROJECTS_DATA: Project[] = [
     title: 'Yukon 10th Retail Store',
     category: 'ongoing',
     sector: 'commercial',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Yukon-10th-Retail-Store.jpg',
+    image: '/blueprint-bg.jpg',
     location: 'Oklahoma, USA',
     tonnage: '720 Tons',
     description: 'Retail superstore building framing with joist seat details and parapet framing.'
@@ -169,70 +169,70 @@ export const SAMPLE_DRAWINGS: SampleDrawing[] = [
     title: 'Shop Drawing Detail 01',
     category: 'shop',
     categoryLabel: 'Shop Drawings',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/Shop-Drawings-1-400x284.jpg'
+    image: '/uploads/2025/08/Shop-Drawings-1-400x284.jpg'
   },
   {
     id: 'sd-2',
     title: 'Shop Drawing Detail 02',
     category: 'shop',
     categoryLabel: 'Shop Drawings',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/Shop-Drawings-2-400x284.jpg'
+    image: '/uploads/2025/08/Shop-Drawings-2-400x284.jpg'
   },
   {
     id: 'sd-3',
     title: 'Shop Drawing Detail 03',
     category: 'shop',
     categoryLabel: 'Shop Drawings',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/Shop-Drawings-3-400x284.jpg'
+    image: '/uploads/2025/08/Shop-Drawings-3-400x284.jpg'
   },
   {
     id: 'sd-4',
     title: 'Shop Drawing Detail 04',
     category: 'shop',
     categoryLabel: 'Shop Drawings',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/Shop-Drawings-4-400x284.jpg'
+    image: '/uploads/2025/08/Shop-Drawings-4-400x284.jpg'
   },
   {
     id: 'sd-5',
     title: 'AB Plan & Embed Plan 01',
     category: 'ab',
     categoryLabel: 'AB & Embed Plans',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/AB-Plan-And-Embed-Plan-Drawings-1-400x284.jpg'
+    image: '/uploads/2025/08/AB-Plan-And-Embed-Plan-Drawings-1-400x284.jpg'
   },
   {
     id: 'sd-6',
     title: 'AB Plan & Embed Plan 02',
     category: 'ab',
     categoryLabel: 'AB & Embed Plans',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/AB-Plan-And-Embed-Plan-Drawings-2-400x284.jpg'
+    image: '/uploads/2025/08/AB-Plan-And-Embed-Plan-Drawings-2-400x284.jpg'
   },
   {
     id: 'sd-7',
     title: 'Structural Framing Plan 01',
     category: 'structural',
     categoryLabel: 'Structural Steel',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/Structural-steel-Drawings-1-400x284.jpg'
+    image: '/uploads/2025/08/Structural-steel-Drawings-1-400x284.jpg'
   },
   {
     id: 'sd-8',
     title: 'Structural Framing Plan 02',
     category: 'structural',
     categoryLabel: 'Structural Steel',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/Structural-steel-Drawings-2-400x284.jpg'
+    image: '/uploads/2025/08/Structural-steel-Drawings-2-400x284.jpg'
   },
   {
     id: 'sd-9',
     title: 'Misc Steel Stair Elevation',
     category: 'misc',
     categoryLabel: 'Miscellaneous Steel',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/Miscellaneous-Steel-Drawings-1-400x284.jpg'
+    image: '/uploads/2025/08/Miscellaneous-Steel-Drawings-1-400x284.jpg'
   },
   {
     id: 'sd-10',
     title: 'Misc Steel Handrail Detail',
     category: 'misc',
     categoryLabel: 'Miscellaneous Steel',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/Miscellaneous-Steel-Drawings-2-400x284.jpg'
+    image: '/uploads/2025/08/Miscellaneous-Steel-Drawings-2-400x284.jpg'
   }
 ];
 
@@ -241,43 +241,43 @@ export const TEAM_MEMBERS: TeamMember[] = [
     id: 'tm-1',
     name: 'Jagatheesh R',
     role: 'President / Owner',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/6.jpg'
+    image: '/uploads/2025/07/6.jpg'
   },
   {
     id: 'tm-2',
     name: 'Jamuna Kumar',
     role: 'Director',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Untitled-design-2-4.jpg'
+    image: '/uploads/2025/07/Untitled-design-2-4.jpg'
   },
   {
     id: 'tm-3',
     name: 'Manoj Kumar',
     role: 'Vice President',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/5-1.jpg'
+    image: '/uploads/2025/07/5-1.jpg'
   },
   {
     id: 'tm-4',
     name: 'Anand Kailash',
     role: 'Sr. Project Manager',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/4-2.jpg'
+    image: '/uploads/2025/07/4-2.jpg'
   },
   {
     id: 'tm-5',
     name: 'Sathish Subramanian',
     role: 'Project Manager',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/1-3.jpg'
+    image: '/uploads/2025/07/1-3.jpg'
   },
   {
     id: 'tm-6',
     name: 'Antony Arokiam Ulaganathan',
     role: 'Project Manager',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/2-3.jpg'
+    image: '/uploads/2025/07/2-3.jpg'
   },
   {
     id: 'tm-7',
     name: 'Selva Perumal',
     role: 'Head - Execution & Deliveries',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/3.jpg'
+    image: '/uploads/2025/07/3.jpg'
   }
 ];
 
@@ -343,7 +343,7 @@ export const BLOG_POSTS: BlogPost[] = [
     date: 'July 5, 2025',
     readTime: '6 min read',
     category: 'Technology',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/medium-vecteezy_london-uk-november-24-2016-heathrow-express-train-to_16108060_medium-1080x675.jpg',
+    image: '/uploads/2025/07/medium-vecteezy_london-uk-november-24-2016-heathrow-express-train-to_16108060_medium-1080x675.jpg',
     sourceUrl: 'https://www.3axialsteeldetail.com/the-digital-revolution-in-steel-detailing-how-technology-is-reshaping-construction/',
     excerpt: 'From manual drafting tables to intelligent 3D models — how BIM, cloud collaboration, automation and CNC integration are rewriting the rules of structural fabrication.',
     content: [
@@ -404,7 +404,7 @@ export const BLOG_POSTS: BlogPost[] = [
     date: 'June 28, 2025',
     readTime: '5 min read',
     category: 'Steel Detailing',
-    image: 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/06/medium-vecteezy_london-england-july-15-2017-london-paddington-station_12008056_medium-1080x675.jpg',
+    image: '/uploads/2025/06/medium-vecteezy_london-england-july-15-2017-london-paddington-station_12008056_medium-1080x675.jpg',
     sourceUrl: 'https://www.3axialsteeldetail.com/best-steel-detailers-in-bangalore/',
     excerpt: 'Steel detailing is the silent blueprint guiding every bolt and beam into place. Why precision detailing isn’t just important — it’s foundational to every successful steel structure.',
     content: [

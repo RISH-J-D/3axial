@@ -50,13 +50,13 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onOpenE
           aria-label="3 Axial Steel Detailing — Home"
         >
           <img
-            src="https://www.3axialsteeldetail.com/wp-content/uploads/2025/06/3axial-logo.png"
+            src="/uploads/2025/06/3axial-logo.png"
             alt="3 Axial Steel Detailing"
             className="h-10 w-auto object-contain lg:h-11"
           />
           <span className="hidden h-8 w-px bg-line sm:block" />
           <img
-            src="https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/3axial-Elements.jpg"
+            src="/uploads/2025/07/3axial-Elements.jpg"
             alt="AISC Associate Member"
             className="hidden h-10 w-auto object-contain sm:block"
           />

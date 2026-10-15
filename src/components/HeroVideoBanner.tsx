@@ -25,10 +25,10 @@ export const HeroVideoBanner: React.FC<HeroVideoBannerProps> = ({ onOpenEnquire,
         loop
         muted
         playsInline
-        poster="https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/Untitled-1280-x-600-px.jpg"
+        poster="/uploads/2025/07/Untitled-1280-x-600-px.jpg"
         className="absolute inset-0 h-full w-full object-cover opacity-100"
       >
-        <source src="https://www.3axialsteeldetail.com/wp-content/uploads/2025/08/Untitled-1280-x-600-px.mp4" type="video/mp4" />
+        <source src="/uploads/2025/08/Untitled-1280-x-600-px.mp4" type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-white/10" />
       

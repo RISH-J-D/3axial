@@ -112,7 +112,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
 
   const handleDownloadBrochure = () => {
     const link = document.createElement('a');
-    link.href = 'https://www.3axialsteeldetail.com/wp-content/uploads/2025/07/3axial-Elements.jpg';
+    link.href = '/uploads/2025/07/3axial-Elements.jpg';
     link.download = '3Axial-Steel-Detailing-Brochure.jpg';
     document.body.appendChild(link);
     link.click();

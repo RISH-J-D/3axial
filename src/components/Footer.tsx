@@ -54,7 +54,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenEnquire }) =
         <div className="lg:col-span-4">
           <div className="inline-flex items-center gap-3">
             <img
-              src="https://www.3axialsteeldetail.com/wp-content/uploads/2025/06/3axial-logo.png"
+              src="/uploads/2025/06/3axial-logo.png"
               alt="3 Axial Steel Detailing"
               className="h-9 w-auto"
             />
