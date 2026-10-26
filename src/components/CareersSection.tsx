@@ -55,7 +55,7 @@ export const CareersSection: React.FC<CareersSectionProps> = ({ onShowToast }) =
               className="grid grid-cols-1 gap-6 border-b border-line py-10 lg:grid-cols-12 lg:gap-10"
             >
               <div className="lg:col-span-4">
-                <p className={`inline-flex rounded-[3px] px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] ${tone(idx).soft} ${tone(idx).text}`}>{job.department}</p>
+                <p className={`inline-flex rounded-[3px] px-2.5 py-1 text-[11px] uppercase tracking-[0.08em] ${tone(idx).soft} ${tone(idx).text}`}>{job.department}</p>
                 <h3 className="mt-3 font-display text-[24px] font-semibold leading-[1.2] tracking-[-0.02em] text-ink">{job.title}</h3>
                 <p className="mt-2 text-[14px] text-muted">{job.location}</p>
               </div>
@@ -86,7 +86,7 @@ export const CareersSection: React.FC<CareersSectionProps> = ({ onShowToast }) =
           <div className="modal-panel max-w-xl" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
             <div className="flex items-start justify-between border-b border-line px-8 py-6">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">Application · {selectedJob.location}</p>
+                <p className="text-[11px] uppercase tracking-[0.08em] text-muted">Application · {selectedJob.location}</p>
                 <h3 className="mt-2 font-display text-[22px] font-semibold tracking-[-0.02em] text-ink">{selectedJob.title}</h3>
               </div>
               <button

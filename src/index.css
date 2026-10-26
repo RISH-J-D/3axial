@@ -2,13 +2,12 @@
 
 /* ------------------------------------------------------------------
    Design tokens
-   Typeface system: Inter Tight (display), Inter (text), IBM Plex Mono (technical labels)
+   Typeface system: Plus Jakarta Sans (display), Inter (text and labels)
    Palette: taken directly from the 3 Axial logo — blue (#1270F9), orange (#F47106), green (#28A44A) on white
 ------------------------------------------------------------------- */
 @theme {
-  --font-display: 'Inter Tight', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-ink: #14213D;
   --color-logo: #1270F9;
@@ -48,8 +47,8 @@
   }
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
-    line-height: 1.12;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
     color: inherit;
   }
   ::selection {
@@ -69,9 +68,9 @@
     @apply py-20 lg:py-28;
   }
 
-  /* Section label: thin orange rule + mono uppercase */
+  /* Section label: thin rule + small uppercase */
   .eyebrow {
-    @apply inline-flex items-center gap-3 font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-brand;
+    @apply inline-flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.1em] text-brand;
   }
   .eyebrow::before {
     content: '';
@@ -85,7 +84,7 @@
   }
 
   .h-section {
-    @apply font-display text-[32px] font-semibold leading-[1.1] tracking-[-0.025em] text-ink sm:text-[40px] lg:text-[46px];
+    @apply font-display text-[32px] font-semibold leading-[1.15] tracking-[-0.02em] text-ink sm:text-[40px] lg:text-[46px];
   }
   .lead {
     @apply text-[17px] leading-[1.7] text-muted;

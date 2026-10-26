@@ -15,6 +15,7 @@ export interface SampleDrawing {
   category: 'shop' | 'ab' | 'structural' | 'misc';
   categoryLabel: string;
   image: string;
+  full: string;
 }
 
 export interface TeamMember {

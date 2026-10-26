@@ -15,6 +15,8 @@ export const CareersPage: React.FC<CareersPageProps> = ({ onNavigateHome, onShow
         subtitle="Join an engineering team shaping steel structures worldwide through Tekla innovation, BIM automation and connection engineering."
         badge="Join Our Team"
         currentTab="Careers"
+        image="/mission-fabrication.jpg"
+        imagePosition="right center"
         onNavigateHome={onNavigateHome}
       />
       <CareersSection onShowToast={onShowToast} />

@@ -35,7 +35,7 @@ export const EnquireModal: React.FC<EnquireModalProps> = ({ isOpen, onClose, onS
         <div className="logo-stripe h-1" />
         <div className="flex items-start justify-between border-b border-line px-8 py-6">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">AISC / CISC steel bids</p>
+            <p className="text-[11px] uppercase tracking-[0.08em] text-muted">AISC / CISC steel bids</p>
             <h3 id="enquire-title" className="mt-2 font-display text-[24px] font-semibold tracking-[-0.02em] text-ink">
               Request a quote
             </h3>

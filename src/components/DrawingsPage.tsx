@@ -30,6 +30,8 @@ export const DrawingsPage: React.FC<DrawingsPageProps> = ({ onNavigateHome }) =>
         subtitle="Review sample sheets for anchor bolt plans, embed layouts, structural steel assemblies and miscellaneous metal details."
         badge="Drawing Quality"
         currentTab="Sample Drawings"
+        image="/headers/steel-bim.jpg"
+        imagePosition="center 60%"
         onNavigateHome={onNavigateHome}
       />
 
@@ -39,7 +41,7 @@ export const DrawingsPage: React.FC<DrawingsPageProps> = ({ onNavigateHome }) =>
         <div className="container-x grid grid-cols-1 gap-px bg-line md:grid-cols-3">
           {QUALITY_NOTES.map((n, i) => (
             <div key={n.title} className="bg-surface py-14 md:px-10 md:first:pl-0">
-              <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full font-mono text-[12px] font-medium ${tone(i).soft} ${tone(i).text}`}>{String(i + 1).padStart(2, '0')}</span>
+              <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-[12px] font-medium ${tone(i).soft} ${tone(i).text}`}>{String(i + 1).padStart(2, '0')}</span>
               <h3 className="mt-5 font-display text-[20px] font-semibold tracking-[-0.015em] text-ink">{n.title}</h3>
               <p className="mt-2 text-[15px] leading-relaxed text-muted">{n.desc}</p>
             </div>

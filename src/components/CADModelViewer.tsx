@@ -41,7 +41,7 @@ export const CADModelViewer: React.FC = () => {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] uppercase tracking-[0.2em] font-mono font-bold bg-[#1A73E8]/10 border border-[#1A73E8]/30 text-[#1A73E8] mb-3">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold bg-[#1A73E8]/10 border border-[#1A73E8]/30 text-[#1A73E8] mb-3">
             <Activity className="w-3.5 h-3.5 text-[#E66A00]" />
             <span>Interactive Tekla CAD Simulator</span>
           </span>
@@ -171,7 +171,7 @@ export const CADModelViewer: React.FC = () => {
               </div>
 
               {/* Bottom Status Readout Bar */}
-              <div className="flex items-center justify-between text-xs text-slate-600 font-mono border-t border-slate-200 pt-3.5 relative z-10">
+              <div className="flex items-center justify-between text-xs text-slate-600 border-t border-slate-200 pt-3.5 relative z-10">
                 <span className="flex items-center gap-2 font-bold">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#2E8540] animate-pulse" />
                   <span>Tekla Structures 2025 Engine • Live Sync</span>
@@ -190,7 +190,7 @@ export const CADModelViewer: React.FC = () => {
                     <Box className="w-5 h-5 text-[#1A73E8]" />
                     <span>Member Inspector</span>
                   </h3>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-green-50 text-[#2E8540] border border-green-200">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-50 text-[#2E8540] border border-green-200">
                     AISC Verified
                   </span>
                 </div>
@@ -220,19 +220,19 @@ export const CADModelViewer: React.FC = () => {
                 {selectedMember && memberDetails[selectedMember] && (
                   <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 shadow-xs">
                     <div>
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Member Type</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Member Type</span>
                       <span className="text-sm font-heading font-extrabold text-slate-900">{memberDetails[selectedMember].type}</span>
                     </div>
                     <div>
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Steel Specification</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Steel Specification</span>
                       <span className="text-xs font-semibold text-[#1A73E8]">{memberDetails[selectedMember].steel}</span>
                     </div>
                     <div>
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Linear Mass</span>
-                      <span className="text-xs font-mono font-bold text-slate-700">{memberDetails[selectedMember].weight}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Linear Mass</span>
+                      <span className="text-xs font-bold text-slate-700">{memberDetails[selectedMember].weight}</span>
                     </div>
                     <div>
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Connection Detail</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Connection Detail</span>
                       <span className="text-xs font-semibold text-[#E66A00]">{memberDetails[selectedMember].connection}</span>
                     </div>
                   </div>
@@ -244,7 +244,7 @@ export const CADModelViewer: React.FC = () => {
                   <ShieldCheck className="w-4 h-4 text-[#2E8540]" />
                   <span>Zero Clash Tolerance</span>
                 </span>
-                <span className="text-[#1A73E8] font-mono">Imperial & Metric</span>
+                <span className="text-[#1A73E8] ">Imperial & Metric</span>
               </div>
             </div>
 

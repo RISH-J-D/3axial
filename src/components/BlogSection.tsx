@@ -41,7 +41,7 @@ const renderBlock = (block: BlogBlock, i: number) => {
         <ol key={i} className="mt-6 grid grid-cols-1 gap-px border border-line bg-line sm:grid-cols-2">
           {block.items.map((item, n) => (
             <li key={item} className="flex items-baseline gap-3 bg-surface px-5 py-4 text-[15px] text-ink">
-              <span className="font-mono text-[12px] text-accent">{String(n + 1).padStart(2, '0')}</span>
+              <span className="text-[12px] text-accent">{String(n + 1).padStart(2, '0')}</span>
               {item}
             </li>
           ))}
@@ -88,7 +88,7 @@ export const BlogSection: React.FC = () => {
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                 />
               </div>
-              <div className="mt-7 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+              <div className="mt-7 flex items-center gap-3 text-[11px] uppercase tracking-[0.08em] text-muted">
                 <span className={tone(idx).text}>{post.category}</span>
                 <span className="h-px w-4 bg-line" />
                 <span>{post.date}</span>
@@ -129,14 +129,14 @@ export const BlogSection: React.FC = () => {
                 </button>
               </div>
               <div className="px-7 py-10 sm:px-12 sm:py-12">
-                <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                <div className="flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.08em] text-muted">
                   <span className="text-brand">{selectedArticle.category}</span>
                   <span className="h-px w-4 bg-line" />
                   <span>{selectedArticle.date}</span>
                   <span className="h-px w-4 bg-line" />
                   <span>{selectedArticle.readTime}</span>
                 </div>
-                <h2 className="mt-4 font-display text-[30px] font-semibold leading-[1.15] tracking-[-0.025em] text-ink sm:text-[38px]">
+                <h2 className="mt-4 font-display text-[30px] font-semibold leading-[1.15] tracking-[-0.02em] text-ink sm:text-[38px]">
                   {selectedArticle.title}
                 </h2>
                 <div className="mt-6">{selectedArticle.content.map(renderBlock)}</div>

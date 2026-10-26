@@ -169,70 +169,80 @@ export const SAMPLE_DRAWINGS: SampleDrawing[] = [
     title: 'Shop Drawing Detail 01',
     category: 'shop',
     categoryLabel: 'Shop Drawings',
-    image: '/uploads/2025/08/Shop-Drawings-1-400x284.jpg'
+    image: '/uploads/2025/08/Shop-Drawings-1-400x284.jpg',
+    full: '/drawings/shop-drawings-1.jpg'
   },
   {
     id: 'sd-2',
     title: 'Shop Drawing Detail 02',
     category: 'shop',
     categoryLabel: 'Shop Drawings',
-    image: '/uploads/2025/08/Shop-Drawings-2-400x284.jpg'
+    image: '/uploads/2025/08/Shop-Drawings-2-400x284.jpg',
+    full: '/drawings/shop-drawings-2.jpg'
   },
   {
     id: 'sd-3',
     title: 'Shop Drawing Detail 03',
     category: 'shop',
     categoryLabel: 'Shop Drawings',
-    image: '/uploads/2025/08/Shop-Drawings-3-400x284.jpg'
+    image: '/uploads/2025/08/Shop-Drawings-3-400x284.jpg',
+    full: '/drawings/shop-drawings-3.jpg'
   },
   {
     id: 'sd-4',
     title: 'Shop Drawing Detail 04',
     category: 'shop',
     categoryLabel: 'Shop Drawings',
-    image: '/uploads/2025/08/Shop-Drawings-4-400x284.jpg'
+    image: '/uploads/2025/08/Shop-Drawings-4-400x284.jpg',
+    full: '/drawings/shop-drawings-4.jpg'
   },
   {
     id: 'sd-5',
     title: 'AB Plan & Embed Plan 01',
     category: 'ab',
     categoryLabel: 'AB & Embed Plans',
-    image: '/uploads/2025/08/AB-Plan-And-Embed-Plan-Drawings-1-400x284.jpg'
+    image: '/uploads/2025/08/AB-Plan-And-Embed-Plan-Drawings-1-400x284.jpg',
+    full: '/drawings/ab-plan-and-embed-plan-drawings-1.jpg'
   },
   {
     id: 'sd-6',
     title: 'AB Plan & Embed Plan 02',
     category: 'ab',
     categoryLabel: 'AB & Embed Plans',
-    image: '/uploads/2025/08/AB-Plan-And-Embed-Plan-Drawings-2-400x284.jpg'
+    image: '/uploads/2025/08/AB-Plan-And-Embed-Plan-Drawings-2-400x284.jpg',
+    full: '/drawings/ab-plan-and-embed-plan-drawings-2.jpg'
   },
   {
     id: 'sd-7',
     title: 'Structural Framing Plan 01',
     category: 'structural',
     categoryLabel: 'Structural Steel',
-    image: '/uploads/2025/08/Structural-steel-Drawings-1-400x284.jpg'
+    image: '/uploads/2025/08/Structural-steel-Drawings-1-400x284.jpg',
+    full: '/drawings/structural-steel-drawings-1.jpg'
   },
   {
     id: 'sd-8',
     title: 'Structural Framing Plan 02',
     category: 'structural',
     categoryLabel: 'Structural Steel',
-    image: '/uploads/2025/08/Structural-steel-Drawings-2-400x284.jpg'
+    image: '/uploads/2025/08/Structural-steel-Drawings-2-400x284.jpg',
+    full: '/drawings/structural-steel-drawings-2.jpg'
   },
   {
     id: 'sd-9',
     title: 'Misc Steel Stair Elevation',
     category: 'misc',
     categoryLabel: 'Miscellaneous Steel',
-    image: '/uploads/2025/08/Miscellaneous-Steel-Drawings-1-400x284.jpg'
+    image: '/uploads/2025/08/Miscellaneous-Steel-Drawings-1-400x284.jpg',
+    full: '/drawings/miscellaneous-steel-drawings-1.jpg'
   },
   {
     id: 'sd-10',
     title: 'Misc Steel Handrail Detail',
     category: 'misc',
     categoryLabel: 'Miscellaneous Steel',
-    image: '/uploads/2025/08/Miscellaneous-Steel-Drawings-2-400x284.jpg'
+    image: '/uploads/2025/08/Miscellaneous-Steel-Drawings-2-400x284.jpg',
+    full: '/drawings/miscellaneous-steel-drawings-2.jpg'
   }
 ];
 

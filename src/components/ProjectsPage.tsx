@@ -15,6 +15,8 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigateHome, onOp
         subtitle="More than 800 structural and miscellaneous steel detailing projects delivered across the United States, Canada, Europe and Asia."
         badge="Portfolio"
         currentTab="Projects"
+        image="/blueprint-bg.jpg"
+        imagePosition="center"
         onNavigateHome={onNavigateHome}
       />
       <ProjectsGallery onOpenEnquire={onOpenEnquire} />

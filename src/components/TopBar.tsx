@@ -45,7 +45,7 @@ export const TopBar: React.FC = () => {
           </a>
         </div>
 
-        <div className="hidden items-center gap-5 font-mono text-[11px] tracking-[0.04em] lg:flex">
+        <div className="hidden items-center gap-5 text-[11px] tracking-[0.04em] lg:flex">
           {ZONES.map((z) => (
             <span key={z.label} className="flex items-center gap-1.5">
               <span className="text-muted/70">{z.label}</span>

@@ -29,7 +29,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({ onShow
         {/* Contact details */}
         <aside className="lg:col-span-4">
           <span className="eyebrow eyebrow-orange">Reach Us</span>
-          <h2 className="mt-5 font-display text-[32px] font-semibold leading-[1.1] tracking-[-0.025em] text-ink">
+          <h2 className="mt-5 font-display text-[32px] font-semibold leading-[1.1] tracking-[-0.02em] text-ink">
             Here’s how you can reach us.
           </h2>
           <p className="lead mt-5">
@@ -38,7 +38,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({ onShow
 
           <dl className="mt-10 divide-y divide-line border-y border-line">
             <div className="py-6">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Registered Office</dt>
+              <dt className="text-[11px] uppercase tracking-[0.08em] text-muted">Registered Office</dt>
               <dd className="mt-3 text-[15px] leading-relaxed text-ink">
                 3 Axial Steel Detailing Pvt. Ltd.
                 <br />
@@ -50,7 +50,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({ onShow
               </dd>
             </div>
             <div className="py-6">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Phone</dt>
+              <dt className="text-[11px] uppercase tracking-[0.08em] text-muted">Phone</dt>
               <dd className="mt-3">
                 <a href="tel:+16506956923" className="text-[17px] font-medium text-ink transition-colors hover:text-brand">
                   +1 650 695 6923
@@ -59,7 +59,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({ onShow
               </dd>
             </div>
             <div className="py-6">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Email</dt>
+              <dt className="text-[11px] uppercase tracking-[0.08em] text-muted">Email</dt>
               <dd className="mt-3">
                 <a href="mailto:info@3axialsteeldetail.com" className="text-[17px] font-medium text-ink transition-colors hover:text-brand">
                   info@3axialsteeldetail.com
@@ -91,7 +91,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({ onShow
           {/* Estimator */}
           <div className="mt-10 border border-line p-6 sm:p-8">
             <div className="flex items-baseline justify-between gap-4">
-              <label htmlFor="tonnage" className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+              <label htmlFor="tonnage" className="text-[11px] uppercase tracking-[0.08em] text-muted">
                 Estimated steel tonnage
               </label>
               <span className="font-display text-[22px] font-semibold tabular-nums text-ink">{tonnage.toLocaleString()} t</span>

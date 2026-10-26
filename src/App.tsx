@@ -94,6 +94,7 @@ export function App() {
               <AboutPage
                 onNavigateHome={() => handleTabChange('home')}
                 onOpenEnquire={() => setIsEnquireOpen(true)}
+                onNavigateCareers={() => handleTabChange('careers')}
               />
             )}
 

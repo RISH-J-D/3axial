@@ -14,6 +14,8 @@ export const BlogPage: React.FC<BlogPageProps> = ({ onNavigateHome }) => {
         subtitle="Perspectives on Tekla modelling workflows, connection design automation, AISC/CISC standards and construction technology."
         badge="Insights"
         currentTab="Insights"
+        image="/vision-3d.png"
+        imagePosition="center"
         onNavigateHome={onNavigateHome}
       />
       <BlogSection />

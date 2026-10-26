@@ -69,7 +69,7 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenEnquire 
           </div>
         </div>
 
-        <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+        <p className="mt-6 text-[11px] uppercase tracking-[0.08em] text-muted">
           {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
         </p>
 
@@ -94,7 +94,7 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenEnquire 
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                   {proj.category === 'ongoing' && (
-                    <span className="absolute left-4 top-4 bg-white px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-ink">
+                    <span className="absolute left-4 top-4 bg-white px-2.5 py-1 text-[11px] uppercase tracking-[0.08em] text-ink">
                       Ongoing
                     </span>
                   )}

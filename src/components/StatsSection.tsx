@@ -23,7 +23,7 @@ export const StatsSection: React.FC = () => {
             index % 2 === 1 ? 'sm:border-l sm:pl-6' : ''
           } ${index > 0 ? 'lg:border-l lg:pl-8' : ''} ${index >= 2 ? 'sm:border-t lg:border-t-0' : ''}`}
         >
-          <div className={`font-display text-[48px] font-semibold leading-none tracking-[-0.04em] ${tone(index).text}`}>{item.number}</div>
+          <div className={`font-display text-[48px] font-semibold leading-none tracking-[-0.02em] ${tone(index).text}`}>{item.number}</div>
           <div className={`mt-4 h-[3px] w-10 ${tone(index).solid}`} />
           <h3 className="mt-4 text-[15px] font-medium text-ink">{item.label}</h3>
           <p className="mt-1 text-[14px] leading-relaxed text-muted">{item.desc}</p>

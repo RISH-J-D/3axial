@@ -118,7 +118,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
                     fill="#1A73E8"
                     fontSize="80"
                     fontWeight="700"
-                    fontFamily="'Inter Tight', 'Inter', system-ui, sans-serif"
+                    fontFamily="'Plus Jakarta Sans', 'Inter', system-ui, sans-serif"
                     letterSpacing="-2"
                     initial={{ x: 60, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -134,7 +134,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
                     fill="#1A73E8"
                     fontSize="80"
                     fontWeight="700"
-                    fontFamily="'Inter Tight', 'Inter', system-ui, sans-serif"
+                    fontFamily="'Plus Jakarta Sans', 'Inter', system-ui, sans-serif"
                     letterSpacing="-1"
                     initial={{ x: -60, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
@@ -173,7 +173,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="mt-2 space-y-1"
           >
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.24em] text-muted">
+            <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-muted">
               Expertise · Dedication · Quality · Progression
             </p>
           </motion.div>

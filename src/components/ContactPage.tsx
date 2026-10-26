@@ -15,6 +15,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigateHome, onShow
         subtitle="Every enquiry is treated with the utmost importance. Our engineering leads cover Eastern, Central, Mountain and Pacific time zones."
         badge="Get in Touch"
         currentTab="Contact"
+        image="/blueprint-bg.jpg"
+        imagePosition="right center"
         onNavigateHome={onNavigateHome}
       />
       <ContactQuoteSection onShowToast={onShowToast} />

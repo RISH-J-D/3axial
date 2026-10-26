@@ -27,6 +27,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigateHome, onOp
         subtitle="From preliminary Tekla tender estimates and Advance Bill of Materials to PE-stamped connection design and shop-ready erection drawings."
         badge="Services"
         currentTab="Services"
+        image="/headers/steel-bim.jpg"
+        imagePosition="center 35%"
         onNavigateHome={onNavigateHome}
       />
 
@@ -49,7 +51,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigateHome, onOp
           <div className="mt-14 overflow-x-auto">
             <table className="w-full min-w-[640px] border-t-2 border-brand text-left">
               <thead>
-                <tr className="border-b border-line font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+                <tr className="border-b border-line text-[11px] uppercase tracking-[0.08em] text-muted">
                   <th className="py-4 pr-6 font-medium">Standard</th>
                   <th className="py-4 pr-6 font-medium">Region</th>
                   <th className="py-4 font-medium">Scope</th>

@@ -33,7 +33,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenEnquire }) =
         <div className="container-x flex flex-col items-start justify-between gap-8 py-16 lg:flex-row lg:items-end">
           <div className="max-w-2xl">
             <span className="eyebrow eyebrow-orange">Start a Project</span>
-            <h2 className="mt-5 font-display text-[32px] font-semibold leading-[1.1] tracking-[-0.025em] text-ink sm:text-[44px]">
+            <h2 className="mt-5 font-display text-[32px] font-semibold leading-[1.1] tracking-[-0.02em] text-ink sm:text-[44px]">
               Have drawings ready for estimation? Let’s talk scope.
             </h2>
           </div>
@@ -63,14 +63,14 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenEnquire }) =
             3 Axial Steel Detailing Services Pvt. Ltd. delivers AISC and CISC compliant Tekla modelling,
             connection design and fabrication drawings to fabricators and contractors worldwide.
           </p>
-          <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-ink/60">
+          <p className="mt-6 text-[11px] uppercase tracking-[0.08em] text-ink/60">
             AISC Associate Member
           </p>
         </div>
 
         {/* Company */}
         <div className="lg:col-span-2">
-          <h4 className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-brand">Company</h4>
+          <h4 className="text-[11px] font-medium uppercase tracking-[0.08em] text-brand">Company</h4>
           <ul className="mt-5 space-y-3 text-[14px]">
             {COMPANY_LINKS.map((l) => (
               <li key={l.id}>
@@ -84,7 +84,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenEnquire }) =
 
         {/* Services */}
         <div className="lg:col-span-3">
-          <h4 className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-accent-dark">Services</h4>
+          <h4 className="text-[11px] font-medium uppercase tracking-[0.08em] text-accent-dark">Services</h4>
           <ul className="mt-5 space-y-3 text-[14px]">
             {SERVICES.map((s) => (
               <li key={s}>
@@ -98,7 +98,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenEnquire }) =
 
         {/* Contact */}
         <div className="lg:col-span-3">
-          <h4 className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-green-dark">Office</h4>
+          <h4 className="text-[11px] font-medium uppercase tracking-[0.08em] text-green-dark">Office</h4>
           <address className="mt-5 text-[14px] not-italic leading-relaxed">
             17B, 3rd Floor, Tech Mahindra Road
             <br />

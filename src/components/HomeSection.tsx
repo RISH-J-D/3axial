@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { HeroVideoBanner } from './HeroVideoBanner';
 import { PartnersStrip } from './PartnersStrip';
+import { GlobalDeliveryMap } from './GlobalDeliveryMap';
 import { tone } from '../theme';
 import { CheckCircle2, Layers, ArrowRight, ArrowUpRight, Building2, Factory, Compass, Wrench, Boxes, Download, Phone, Mail } from 'lucide-react';
 
@@ -16,17 +17,6 @@ const reveal = {
   viewport: { once: true, margin: '-60px' },
   transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }
 };
-
-const CLOCKS = [
-  { region: 'India', city: 'Bengaluru (HQ)', tz: 'Asia/Kolkata' },
-  { region: 'US Eastern', city: 'New York', tz: 'America/New_York' },
-  { region: 'US Central', city: 'Chicago', tz: 'America/Chicago' },
-  { region: 'US Mountain', city: 'Denver', tz: 'America/Denver' },
-  { region: 'US Pacific', city: 'Los Angeles', tz: 'America/Los_Angeles' },
-  { region: 'Canada', city: 'Toronto', tz: 'America/Toronto' },
-  { region: 'Europe', city: 'London', tz: 'Europe/London' },
-  { region: 'Australia', city: 'Sydney', tz: 'Australia/Sydney' }
-];
 
 const CORE_SERVICES = [
   {
@@ -84,22 +74,8 @@ const TESTIMONIALS = [
 ];
 
 export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavigateTab }) => {
-  const [now, setNow] = useState(() => new Date());
   const [formData, setFormData] = useState({ name: '', phone: '', email: '', message: '' });
   const [formSubmitted, setFormSubmitted] = useState(false);
-
-  useEffect(() => {
-    const interval = setInterval(() => setNow(new Date()), 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const formatTime = (timeZone: string) => {
-    try {
-      return new Intl.DateTimeFormat('en-US', { timeZone, hour: '2-digit', minute: '2-digit', hour12: true }).format(now);
-    } catch {
-      return now.toLocaleTimeString();
-    }
-  };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -167,7 +143,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
                   i >= 2 ? 'mt-8 border-t lg:mt-0 lg:border-t-0' : ''
                 }`}
               >
-                <div className={`font-display text-[48px] font-semibold leading-none tracking-[-0.04em] sm:text-[60px] ${tone(i).text}`}>
+                <div className={`font-display text-[48px] font-semibold leading-none tracking-[-0.02em] sm:text-[60px] ${tone(i).text}`}>
                   {s.n}
                 </div>
                 <div className={`mt-4 h-[3px] w-10 ${tone(i).solid}`} />
@@ -210,7 +186,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
                     <span className={`flex h-14 w-14 items-center justify-center rounded-[4px] ${tone(idx).soft}`}>
                       <Icon className={`h-7 w-7 ${tone(idx).text}`} strokeWidth={1.5} />
                     </span>
-                    <span className={`font-mono text-[12px] font-medium ${tone(idx).text}`}>
+                    <span className={`text-[12px] font-medium ${tone(idx).text}`}>
                       {String(idx + 1).padStart(2, '0')}
                     </span>
                   </div>
@@ -285,7 +261,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
                 transition={{ ...reveal.transition, delay: (idx % 3) * 0.06 }}
                 className={`relative bg-white p-8 lg:p-10 border-t-[3px] ${tone(idx).border}`}
               >
-                <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full font-mono text-[12px] font-medium ${tone(idx).soft} ${tone(idx).text}`}>{String(idx + 1).padStart(2, '0')}</span>
+                <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-[12px] font-medium ${tone(idx).soft} ${tone(idx).text}`}>{String(idx + 1).padStart(2, '0')}</span>
                 <h3 className="mt-6 font-display text-[20px] font-semibold tracking-[-0.015em] text-ink first-letter:uppercase">{p.title}</h3>
                 <p className="mt-3 text-[15px] leading-[1.65] text-muted">{p.desc}</p>
               </motion.div>
@@ -298,35 +274,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
       <PartnersStrip />
 
       {/* 7. Time zones */}
-      <section className="section bg-surface">
-        <div className="container-x">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
-            <motion.div {...reveal} className="lg:col-span-5">
-              <span className="eyebrow eyebrow-orange">Global Delivery</span>
-              <h2 className="h-section mt-5">Aligned with your working day.</h2>
-            </motion.div>
-            <motion.p {...reveal} className="lead lg:col-span-6 lg:col-start-7 lg:pt-10">
-              Our dual-shift engineering teams overlap with office hours across North America, Europe and
-              Australia — so questions are answered and revisions turned around while your team is online.
-            </motion.p>
-          </div>
-
-          <div className="mt-14 grid grid-cols-2 border-l border-t border-line bg-white md:grid-cols-4">
-            {CLOCKS.map((c, i) => (
-              <div key={c.tz} className="border-b border-r border-line p-6 lg:p-8">
-                <div className={`flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] ${tone(i).text}`}>
-                  <span className={`h-2 w-2 rounded-full ${tone(i).solid}`} />
-                  {c.region}
-                </div>
-                <div className="mt-3 font-display text-[26px] font-semibold tracking-[-0.02em] text-ink tabular-nums sm:text-[30px]">
-                  {formatTime(c.tz)}
-                </div>
-                <div className="mt-1 text-[13px] text-muted">{c.city}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <GlobalDeliveryMap />
 
       {/* 8. Testimonials */}
       <section className="section">
