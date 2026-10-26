@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onOpenE
         isScrolled ? 'shadow-[0_1px_0_0_var(--color-line),0_8px_24px_-12px_rgba(11,22,38,0.12)]' : 'border-b border-line'
       }`}
     >
-      <div className="container-x flex h-[76px] items-center justify-between gap-6">
+      <div className="flex h-[76px] w-full items-center justify-between gap-6 px-5 sm:px-8 lg:px-10">
         {/* Brand */}
         <button
           type="button"
@@ -58,6 +58,11 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onOpenE
           <img
             src="/uploads/2025/07/3axial-Elements.jpg"
             alt="AISC Associate Member"
+            className="hidden h-10 w-auto object-contain sm:block"
+          />
+          <img
+            src="/uploads/2025/07/nisd-logo.png"
+            alt="NISD — National Institute of Steel Detailing"
             className="hidden h-10 w-auto object-contain sm:block"
           />
         </button>

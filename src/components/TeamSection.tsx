@@ -14,15 +14,16 @@ export const TeamSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-8">
           {TEAM_MEMBERS.map((member, idx) => (
             <motion.figure
               key={member.id}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: (idx % 4) * 0.06 }}
+              transition={{ duration: 0.5, delay: (idx < 3 ? idx : idx - 3) * 0.06 }}
               viewport={{ once: true }}
-              className="group"
+              // lg: 3 centred on top, 4 below
+              className={`group lg:col-span-2 ${idx === 0 ? 'lg:col-start-2' : ''}`}
             >
               <div className="aspect-[4/5] overflow-hidden bg-surface">
                 <img
