@@ -14,13 +14,13 @@ const reveal = {
 
 // at: lon/lat where each site's structure stands, set clear of its neighbours; a leader runs back to the city.
 const SITES: SiteDef[] = [
-  { city: 'Los Angeles', country: 'United States', lon: -118.24, lat: 34.05, at: [-136, 16] },
-  { city: 'Denver', country: 'United States', lon: -104.99, lat: 39.74, at: [-129, 60] },
-  { city: 'Chicago', country: 'United States', lon: -87.63, lat: 41.88, at: [-96, 65] },
-  { city: 'Toronto', country: 'Canada', lon: -79.38, lat: 43.65, at: [-62, 57] },
-  { city: 'New York', country: 'United States', lon: -74.0, lat: 40.71, at: [-42, 27] },
-  { city: 'London', country: 'United Kingdom', lon: -0.13, lat: 51.5, at: [-20, 62] },
-  { city: 'Sydney', country: 'Australia', lon: 151.21, lat: -33.87, at: [164, -12] }
+  { city: 'Los Angeles', country: 'United States', lon: -118.24, lat: 34.05, at: [-146, 18] },
+  { city: 'Denver', country: 'United States', lon: -104.99, lat: 39.74, at: [-128, 64] },
+  { city: 'Chicago', country: 'United States', lon: -87.63, lat: 41.88, at: [-97, 66] },
+  { city: 'Toronto', country: 'Canada', lon: -79.38, lat: 43.65, at: [-66, 64] },
+  { city: 'New York', country: 'United States', lon: -74.0, lat: 40.71, at: [-48, 26] },
+  { city: 'London', country: 'United Kingdom', lon: -0.13, lat: 51.5, at: [-18, 64] },
+  { city: 'Sydney', country: 'Australia', lon: 151.21, lat: -33.87, at: [165, -15] }
 ];
 
 const noop = () => {};
@@ -50,7 +50,7 @@ export const GlobalDeliveryMap: React.FC = () => {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
           <motion.div {...reveal} className="lg:col-span-5">
             <span className="eyebrow eyebrow-orange">Global Delivery</span>
-            <h2 className="h-section mt-5 lg:mt-4 lg:text-[40px]">Aligned with your working day.</h2>
+            <h2 className="h-section mt-6 lg:mt-4 lg:text-[44px]">Aligned with your <em className="text-accent-dark">working day.</em></h2>
           </motion.div>
           <motion.p {...reveal} className="lead lg:col-span-6 lg:col-start-7 lg:pt-8">
             Our dual-shift engineering teams overlap with office hours across North America, Europe and

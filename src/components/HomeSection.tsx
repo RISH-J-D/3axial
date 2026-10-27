@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { HeroVideoBanner } from './HeroVideoBanner';
 import { PartnersStrip } from './PartnersStrip';
 import { GlobalDeliveryMap } from './GlobalDeliveryMap';
+import { Marquee } from './Marquee';
+import { CountUp } from './CountUp';
 import { tone } from '../theme';
 import { CheckCircle2, Layers, ArrowRight, ArrowUpRight, Building2, Factory, Compass, Wrench, Boxes, Download, Phone, Mail } from 'lucide-react';
 
@@ -99,13 +101,14 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
     <div className="bg-white">
       {/* 1. Hero */}
       <HeroVideoBanner onOpenEnquire={onOpenEnquire} onExploreProjects={() => onNavigateTab('projects')} />
+      <Marquee />
 
       {/* 2. Company introduction */}
       <section className="section">
         <div className="container-x grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           <motion.div {...reveal} className="lg:col-span-5">
             <span className="eyebrow">About 3 Axial</span>
-            <h2 className="h-section mt-5">A detailing partner built on shop-floor experience.</h2>
+            <h2 className="h-section mt-6">A detailing partner built on <em className="text-brand">shop-floor</em> experience.</h2>
           </motion.div>
           <motion.div {...reveal} className="space-y-6 lg:col-span-7 lg:pt-10">
             <p className="text-[19px] leading-[1.65] text-ink">
@@ -143,8 +146,8 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
                   i >= 2 ? 'mt-8 border-t lg:mt-0 lg:border-t-0' : ''
                 }`}
               >
-                <div className={`font-display text-[48px] font-semibold leading-none tracking-[-0.02em] sm:text-[60px] ${tone(i).text}`}>
-                  {s.n}
+                <div className={`font-display text-[48px] font-semibold leading-none tracking-[-0.03em] sm:text-[64px] ${tone(i).text}`}>
+                  <CountUp value={s.n} />
                 </div>
                 <div className={`mt-4 h-[3px] w-10 ${tone(i).solid}`} />
                 <div className="mt-3 text-[14px] text-muted">{s.l}</div>
@@ -160,7 +163,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
           <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
             <motion.div {...reveal} className="max-w-2xl">
               <span className="eyebrow eyebrow-orange">What We Detail</span>
-              <h2 className="h-section mt-5">Structural and miscellaneous steel, across every sector.</h2>
+              <h2 className="h-section mt-6">Structural and miscellaneous steel, across <em className="text-accent-dark">every sector.</em></h2>
             </motion.div>
             <motion.div {...reveal}>
               <button onClick={() => onNavigateTab('services')} className="btn-outline">
@@ -186,7 +189,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
                     <span className={`flex h-14 w-14 items-center justify-center rounded-[4px] ${tone(idx).soft}`}>
                       <Icon className={`h-7 w-7 ${tone(idx).text}`} strokeWidth={1.5} />
                     </span>
-                    <span className={`text-[12px] font-medium ${tone(idx).text}`}>
+                    <span className={`font-serif text-[22px] italic leading-none ${tone(idx).text} opacity-60`}>
                       {String(idx + 1).padStart(2, '0')}
                     </span>
                   </div>
@@ -225,11 +228,14 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
             }
           ].map((card, i) => (
             <motion.article key={card.label} {...reveal} transition={{ ...reveal.transition, delay: i * 0.1 }}>
-              <div className="aspect-[16/10] overflow-hidden bg-surface">
-                <img src={card.img} alt={card.alt} className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.03]" />
+              <div className="frame aspect-[16/10]">
+                <img src={card.img} alt={card.alt} />
+                <span className={`absolute left-6 top-6 flex h-10 w-10 items-center justify-center bg-white font-serif text-[20px] italic ${tone(i).text}`}>
+                  {String(i + 1).padStart(2, '0')}
+                </span>
               </div>
               <span className={`eyebrow mt-8 ${i === 1 ? 'eyebrow-orange' : ''}`}>{card.label}</span>
-              <p className="mt-4 font-display text-[24px] font-medium leading-[1.4] tracking-[-0.015em] text-ink sm:text-[26px]">
+              <p className="mt-5 font-display text-[24px] font-medium leading-[1.35] tracking-[-0.02em] text-ink sm:text-[28px]">
                 {card.text}
               </p>
             </motion.article>
@@ -238,32 +244,37 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
       </section>
 
       {/* 5. Why 3 Axial */}
-      <section className="section bg-surface">
+      <section className="section grain relative overflow-hidden bg-night text-white">
+        <div className="draft-grid absolute inset-0" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-40 top-10 h-[520px] w-[520px] rounded-full bg-logo/20 blur-[160px]" />
         <div className="container-x">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
             <motion.div {...reveal} className="lg:col-span-5">
-              <span className="eyebrow eyebrow-green">Why 3 Axial</span>
-              <h2 className="h-section mt-5">
-                Engineered for reliability, speed and precision.
+              <span className="eyebrow eyebrow-light">Why 3 Axial</span>
+              <h2 className="h-section mt-6 text-white">
+                Engineered for reliability, speed and <em className="text-accent">precision.</em>
               </h2>
             </motion.div>
-            <motion.p {...reveal} className="lead lg:col-span-6 lg:col-start-7 lg:pt-10">
+            <motion.p {...reveal} className="lead text-white/60 lg:col-span-6 lg:col-start-7 lg:pt-10">
               Fabricators choose us because the drawings arrive on schedule, check cleanly and build without
               surprises on the shop floor. These are the commitments behind that.
             </motion.p>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 gap-px border border-line bg-line md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 border-l border-t border-white/10 md:grid-cols-2 lg:grid-cols-3">
             {WHY_PILLARS.map((p, idx) => (
               <motion.div
                 key={p.title}
                 {...reveal}
                 transition={{ ...reveal.transition, delay: (idx % 3) * 0.06 }}
-                className={`relative bg-white p-8 lg:p-10 border-t-[3px] ${tone(idx).border}`}
+                className="group relative border-b border-r border-white/10 p-8 transition-colors duration-500 hover:bg-white/[0.04] lg:p-10"
               >
-                <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-[12px] font-medium ${tone(idx).soft} ${tone(idx).text}`}>{String(idx + 1).padStart(2, '0')}</span>
-                <h3 className="mt-6 font-display text-[20px] font-semibold tracking-[-0.015em] text-ink first-letter:uppercase">{p.title}</h3>
-                <p className="mt-3 text-[15px] leading-[1.65] text-muted">{p.desc}</p>
+                <span className={`absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 ${tone(idx).solid}`} />
+                <span className="font-serif text-[40px] italic leading-none text-white/25 transition-colors duration-500 group-hover:text-white/60">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <h3 className="mt-8 font-display text-[21px] font-semibold tracking-[-0.02em] text-white first-letter:uppercase">{p.title}</h3>
+                <p className="mt-3 text-[15px] leading-[1.7] text-white/55">{p.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -281,16 +292,17 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
         <div className="container-x">
           <motion.div {...reveal} className="max-w-2xl">
             <span className="eyebrow eyebrow-green">Client Perspectives</span>
-            <h2 className="h-section mt-5">What our clients say.</h2>
+            <h2 className="h-section mt-6">What our <em className="text-green-dark">clients</em> say.</h2>
           </motion.div>
 
           <div className="mt-14 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
             {TESTIMONIALS.map((t, i) => (
-              <motion.figure key={t.author} {...reveal} transition={{ ...reveal.transition, delay: i * 0.1 }} className={`border-t-[3px] pt-10 ${tone(i + 1).border}`}>
-                <span className="font-display text-[56px] leading-none text-accent" aria-hidden="true">
+              <motion.figure key={t.author} {...reveal} transition={{ ...reveal.transition, delay: i * 0.1 }} className="relative border-t border-line pt-12">
+                <span className={`absolute left-0 top-0 h-[2px] w-16 ${tone(i + 1).solid}`} />
+                <span className={`font-serif text-[96px] italic leading-[0.6] ${tone(i + 1).text}`} aria-hidden="true">
                   “
                 </span>
-                <blockquote className="mt-2 text-[19px] leading-[1.65] text-ink">{t.quote}</blockquote>
+                <blockquote className="mt-4 font-serif text-[24px] italic leading-[1.5] text-ink sm:text-[27px]">{t.quote}</blockquote>
                 <figcaption className="mt-8 flex items-center gap-4">
                   <span className={`flex h-11 w-11 items-center justify-center rounded-full font-display text-[16px] font-semibold ${tone(i + 1).soft} ${tone(i + 1).text}`}>
                     {t.author.charAt(0)}
@@ -307,11 +319,19 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
       </section>
 
       {/* 9. Enquiry */}
-      <section className="border-t border-line bg-surface">
-        <div className="container-x grid grid-cols-1 lg:grid-cols-12">
+      <section className="relative overflow-hidden border-t border-line bg-surface">
+        {/* Blueprint backdrop: visible behind the headline, dissolving into the surface under the form */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+          <img src="/blueprint-bg.jpg" alt="" loading="lazy" className="h-full w-full object-cover object-center opacity-30" />
+          <div className="absolute inset-0 bg-logo/10 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-gradient-to-r from-surface/55 via-surface/85 via-50% to-surface" />
+          <div className="absolute inset-0 bg-gradient-to-b from-surface via-transparent to-surface" />
+        </div>
+
+        <div className="container-x relative grid grid-cols-1 lg:grid-cols-12">
           <div className="py-20 lg:col-span-5 lg:py-28 lg:pr-16">
             <span className="eyebrow eyebrow-orange">Enquire</span>
-            <h2 className="h-section mt-5">Tell us about your project.</h2>
+            <h2 className="h-section mt-6">Tell us about <em className="text-accent-dark">your project.</em></h2>
             <p className="lead mt-6">
               Speak directly with our senior detailing managers about scope, a pre-bid estimate or AISC connection
               requirements. We respond within two to four business hours.
@@ -334,7 +354,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
             </button>
           </div>
 
-          <div className="bg-white px-6 py-12 sm:px-10 lg:col-span-7 lg:px-14 lg:py-20">
+          <div className="relative bg-white px-6 py-12 shadow-[0_30px_70px_-40px_rgba(20,33,61,0.35)] ring-1 ring-line sm:px-10 lg:col-span-7 lg:px-14 lg:py-20">
             {formSubmitted ? (
               <div className="flex h-full flex-col items-start justify-center py-12">
                 <CheckCircle2 className="h-10 w-10 text-brand" strokeWidth={1.5} />

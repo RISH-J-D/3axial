@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail } from 'lucide-react';
+import { Phone, Mail, MapPin } from 'lucide-react';
 
 // TODO: replace '#' with the real profile URLs
 const SOCIALS = [
@@ -27,35 +27,43 @@ const SOCIALS = [
 
 export const TopBar: React.FC = () => {
   return (
-    <div className="w-full border-b border-line bg-surface text-muted text-[12px]">
+    <div className="w-full bg-night text-[12px] text-white/60">
       <div className="logo-stripe h-[3px]" />
       <div className="container-x flex h-10 items-center justify-between gap-6">
-        <div className="flex items-center gap-6">
-          <a href="tel:+16506956923" className="flex items-center gap-2 transition-colors hover:text-brand">
-            <Phone className="h-3.5 w-3.5 text-accent-dark" strokeWidth={1.75} />
-            <span>+1 650 695 6923</span>
+        <div className="flex items-center gap-7">
+          <a href="tel:+16506956923" className="flex items-center gap-2 transition-colors hover:text-white">
+            <Phone className="h-3.5 w-3.5 text-accent" strokeWidth={1.75} />
+            <span className="tracking-[0.02em]">+1 650 695 6923</span>
           </a>
-          <a href="mailto:info@3axialsteeldetail.com" className="hidden items-center gap-2 transition-colors hover:text-brand sm:flex">
-            <Mail className="h-3.5 w-3.5 text-green-dark" strokeWidth={1.75} />
-            <span>info@3axialsteeldetail.com</span>
+          <a href="mailto:info@3axialsteeldetail.com" className="hidden items-center gap-2 transition-colors hover:text-white sm:flex">
+            <Mail className="h-3.5 w-3.5 text-green" strokeWidth={1.75} />
+            <span className="tracking-[0.02em]">info@3axialsteeldetail.com</span>
           </a>
+          <span className="hidden items-center gap-2 lg:flex">
+            <MapPin className="h-3.5 w-3.5 text-logo" strokeWidth={1.75} />
+            <span className="tracking-[0.02em]">Bengaluru, India · Serving North America, Europe & Australia</span>
+          </span>
         </div>
 
-        <div className="flex items-center gap-4">
-          {SOCIALS.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={s.label}
-              className="transition-colors hover:text-brand"
-            >
-              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
-                <path d={s.path} />
-              </svg>
-            </a>
-          ))}
+        <div className="flex items-center gap-5">
+          <span className="hidden text-[10px] font-medium uppercase tracking-[0.2em] text-white/40 md:block">AISC Associate Member</span>
+          <span className="hidden h-3 w-px bg-white/15 md:block" />
+          <div className="flex items-center gap-4">
+            {SOCIALS.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="text-white/50 transition-colors hover:text-white"
+              >
+                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
+                  <path d={s.path} />
+                </svg>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>

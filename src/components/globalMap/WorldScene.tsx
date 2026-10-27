@@ -2,15 +2,16 @@ import React, { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { generateStructure, I_SECTION, PROFILE, ROUND, SLAB } from './structures';
-import type { Member, Panel, PanelKind, Structure, V3 } from './structures';
+import type { Fixture, Member, Panel, PanelKind, Structure, V3 } from './structures';
 
 /* ------------------------------------------------------------------
    Map frame
 ------------------------------------------------------------------- */
 
 const K = 0.1; // world units per degree
-const LAND_H = 0.04;
+const LAND_H = 0.08;
 const VIEW = { w: 35.5, h: 13.2, cx: 1.4, cz: -1.6 };
 const ELEVATION = THREE.MathUtils.degToRad(58);
 const CAM_DIR = new THREE.Vector3(0, Math.sin(ELEVATION), Math.cos(ELEVATION));
@@ -25,6 +26,7 @@ const HQ_DEF = { city: 'Bengaluru', country: 'India', lon: 77.59, lat: 12.97 };
 const COLOR = {
   land: '#F47106',
   coast: '#C45500',
+  landSide: '#B85200',
   border: '#FFD3AD',
   graticule: '#DDE2E9',
   ink: '#14213D',
@@ -34,7 +36,8 @@ const COLOR = {
   deck: '#B7BDC6',
   roof: '#C9D0D9',
   wall: '#E6E9ED',
-  slab: '#E3E6EA',
+  slab: '#DDE0E4',
+  earth: '#CFC6B8',
   crane: '#E2A60F',
   craneDark: '#2B3340',
   counterweight: '#9AA1AA',
@@ -49,6 +52,7 @@ const SITE_ROTATION = -0.6;
 const GLASS_OPACITY = 0.55;
 const DROP = 0.55;
 const UNROLL_S = 1.1;
+const GROW_S = 0.6;
 const HOLD_S = 4.5;
 const FADE_S = 1.2;
 const PACKET_S = 2.6;
@@ -116,6 +120,31 @@ const buildWorld = (data: WorldData) => {
   };
 };
 
+let worldData: Promise<WorldData> | null = null;
+const loadWorld = () => (worldData ??= fetch('/geo/world-50m.json').then((r) => r.json() as Promise<WorldData>));
+
+// Outer land rings with their bounds, for testing whether a point is ashore
+type Ring = { pts: [number, number][]; box: [number, number, number, number] };
+let landRings: Promise<Ring[]> | null = null;
+const loadLandRings = () =>
+  (landRings ??= loadWorld().then((d) =>
+    d.land.map((poly) => {
+      const pts = unwrap(decode(poly[0], d.q));
+      const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+      return { pts, box: [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)] as Ring['box'] };
+    })
+  ));
+const ashore = (rings: Ring[], lon: number, lat: number) =>
+  rings.some(({ pts, box }) => {
+    if (lon < box[0] || lon > box[2] || lat < box[1] || lat > box[3]) return false;
+    let inside = false;
+    for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+      const [xi, yi] = pts[i], [xj, yj] = pts[j];
+      if (yi > lat !== yj > lat && lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) inside = !inside;
+    }
+    return inside;
+  });
+
 const graticule = (() => {
   const lines: [number, number][][] = [];
   for (let lon = -150; lon <= 180; lon += 15) lines.push([[lon, 80], [lon, -55]]);
@@ -123,13 +152,86 @@ const graticule = (() => {
   return segments(lines, 0, false);
 })();
 
+// Soft, seamless mottling and grain so the land reads as ground rather than a flat fill
+const landTexture = () => {
+  const N = 256, cells = 6;
+  const r = (() => {
+    let seed = 7;
+    return () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+  })();
+  const grid = (n: number) => Array.from({ length: n * n }, r);
+  const octaves = [cells, cells * 2, cells * 4].map((n) => ({ n, g: grid(n) }));
+  const smooth = (t: number) => t * t * (3 - 2 * t);
+  const noise = ({ n, g }: { n: number; g: number[] }, u: number, v: number) => {
+    const x = u * n, y = v * n, x0 = Math.floor(x), y0 = Math.floor(y), fx = smooth(x - x0), fy = smooth(y - y0);
+    const at = (i: number, j: number) => g[((j % n) * n + (i % n)) % (n * n)];
+    const top = at(x0, y0) + (at(x0 + 1, y0) - at(x0, y0)) * fx;
+    const bot = at(x0, y0 + 1) + (at(x0 + 1, y0 + 1) - at(x0, y0 + 1)) * fx;
+    return top + (bot - top) * fy;
+  };
+  return canvasTexture(N, N, (ctx) => {
+    const img = ctx.createImageData(N, N);
+    for (let j = 0; j < N; j++)
+      for (let i = 0; i < N; i++) {
+        const u = i / N, v = j / N;
+        const n = noise(octaves[0], u, v) * 0.55 + noise(octaves[1], u, v) * 0.3 + noise(octaves[2], u, v) * 0.15;
+        const val = 255 * (0.93 + n * 0.07 - r() * 0.025);
+        const k = (j * N + i) * 4;
+        img.data[k] = img.data[k + 1] = img.data[k + 2] = val;
+        img.data[k + 3] = 255;
+      }
+    ctx.putImageData(img, 0, 0);
+  });
+};
+
+const oceanTexture = () =>
+  canvasTexture(512, 256, (g) => {
+    g.fillStyle = 'rgba(0,0,0,0)';
+    g.fillRect(0, 0, 512, 256);
+    g.save();
+    g.scale(1, 0.5);
+    const grad = g.createRadialGradient(256, 256, 0, 256, 256, 256);
+    grad.addColorStop(0, 'rgba(206,220,234,0.6)');
+    grad.addColorStop(0.55, 'rgba(206,220,234,0.4)');
+    grad.addColorStop(1, 'rgba(206,220,234,0)');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, 512, 512);
+    g.restore();
+  });
+
+// Studio reflections for metal and glass; the land is matte so it stays flat
+const Reflections: React.FC = () => {
+  const { gl, scene } = useThree();
+  useEffect(() => {
+    const pmrem = new THREE.PMREMGenerator(gl);
+    const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    scene.environment = env;
+    scene.environmentIntensity = 0.35;
+    pmrem.dispose();
+    return () => {
+      scene.environment = null;
+      env.dispose();
+    };
+  }, [gl, scene]);
+  return null;
+};
+
 const World: React.FC = () => {
+  const ocean = useMemo(() => oceanTexture(), []);
+  const landMats = useMemo(() => {
+    const map = landTexture();
+    map.wrapS = map.wrapT = THREE.RepeatWrapping;
+    map.repeat.set(0.7, 0.7);
+    return [
+      new THREE.MeshStandardMaterial({ color: COLOR.land, map, roughness: 0.9 }),
+      new THREE.MeshStandardMaterial({ color: COLOR.landSide, roughness: 0.95 })
+    ];
+  }, []);
   const [geo, setGeo] = useState<ReturnType<typeof buildWorld> | null>(null);
   useEffect(() => {
     let alive = true;
-    fetch('/geo/world-50m.json')
-      .then((r) => r.json())
-      .then((d: WorldData) => alive && setGeo(buildWorld(d)))
+    loadWorld()
+      .then((d) => alive && setGeo(buildWorld(d)))
       .catch(() => undefined);
     return () => {
       alive = false;
@@ -141,15 +243,17 @@ const World: React.FC = () => {
       <lineSegments geometry={graticule}>
         <lineBasicMaterial color={COLOR.graticule} />
       </lineSegments>
+      <mesh rotation-x={-Math.PI / 2} position={[VIEW.cx, -0.004, VIEW.cz]}>
+        <planeGeometry args={[VIEW.w + 2, VIEW.h / Math.sin(ELEVATION) + 1]} />
+        <meshBasicMaterial map={ocean} transparent depthWrite={false} />
+      </mesh>
       <mesh rotation-x={-Math.PI / 2} position-y={-0.002} receiveShadow>
         <planeGeometry args={[80, 40]} />
         <shadowMaterial opacity={0.07} />
       </mesh>
       {geo && (
         <>
-          <mesh geometry={geo.fill} receiveShadow>
-            <meshStandardMaterial color={COLOR.land} roughness={0.9} />
-          </mesh>
+          <mesh geometry={geo.fill} material={landMats} receiveShadow />
           <lineSegments geometry={geo.coast}>
             <lineBasicMaterial color={COLOR.coast} transparent opacity={0.55} />
           </lineSegments>
@@ -216,6 +320,21 @@ const panelMatrix = (p: Panel, out: THREE.Matrix4, extent = 1) => {
   _n.crossVectors(_v, _u).normalize().multiplyScalar(PANEL_T[p.kind]);
   _c.fromArray(p.o).addScaledVector(_u, 0.5).addScaledVector(_v, 0.5);
   return out.makeBasis(_u, _n, _v).setPosition(_c);
+};
+
+// Fixtures grow out from their start point; round ones are cylinders of diameter w.
+const fixtureMatrix = (f: Fixture, out: THREE.Matrix4, grow = 1) => {
+  _a.fromArray(f.a);
+  _b.fromArray(f.b);
+  _z.subVectors(_b, _a);
+  const len = Math.max(1e-4, _z.length() * grow);
+  _z.normalize();
+  _x.crossVectors(Math.abs(_z.y) > 0.95 ? SIDE : UP, _z).normalize();
+  _y.crossVectors(_z, _x);
+  _c.copy(_a).addScaledVector(_z, len / 2);
+  if (f.round) out.makeBasis(_x.multiplyScalar(f.w), _z.multiplyScalar(len), _y.multiplyScalar(-f.w));
+  else out.makeBasis(_x.multiplyScalar(f.w), _y.multiplyScalar(f.d), _z.multiplyScalar(len));
+  return out.setPosition(_c);
 };
 
 /* Surface finishes drawn once on small canvases: profiled sheeting ribs and curtain-wall mullions */
@@ -372,18 +491,24 @@ const detailMatrices = (m: Member): THREE.Matrix4[] => {
   return out;
 };
 
-type Timeline = { spacing: number; memberStart: number[]; panelStart: number[]; total: number };
+type Timeline = { spacing: number; memberStart: number[]; panelStart: number[]; fixtureStart: number[]; total: number };
 
 const planTimeline = (s: Structure): Timeline => {
   const n = s.members.length;
   const spacing = (s.duration * 0.85) / n;
   const memberStart = s.members.map((_, i) => i * spacing);
   const panelStart = s.panels.map((p) => (p.after > 0 ? p.after * spacing : 0));
-  const total = Math.max(n * spacing, ...panelStart.map((t) => t + UNROLL_S)) + 0.4;
-  return { spacing, memberStart, panelStart, total };
+  // Fixtures released together are fitted one after another
+  let rank = 0;
+  const fixtureStart = s.fixtures.map((f, j) => {
+    rank = j > 0 && s.fixtures[j - 1].after === f.after ? rank + 1 : 0;
+    return f.after * spacing + Math.min(rank * 0.035, 3);
+  });
+  const total = Math.max(n * spacing, ...panelStart.map((t) => t + UNROLL_S), ...fixtureStart.map((t) => t + GROW_S)) + 0.4;
+  return { spacing, memberStart, panelStart, fixtureStart, total };
 };
 
-type SiteMaterials = Record<'steel' | 'pipe' | 'static' | PanelKind, THREE.MeshStandardMaterial>;
+type SiteMaterials = Record<'steel' | 'pipe' | 'static' | 'fixture' | PanelKind, THREE.MeshStandardMaterial>;
 
 const Erection: React.FC<{ s: Structure; plan: Timeline; time: React.RefObject<number>; mats: SiteMaterials }> = ({ s, plan, time, mats }) => {
   const iRef = useRef<THREE.InstancedMesh>(null);
@@ -403,6 +528,8 @@ const Erection: React.FC<{ s: Structure; plan: Timeline; time: React.RefObject<n
   const hookRef = useRef<THREE.Mesh>(null);
   const cableRef = useRef<THREE.BufferGeometry>(null);
   const detailRef = useRef<THREE.InstancedMesh>(null);
+  const fixBoxRef = useRef<THREE.InstancedMesh>(null);
+  const fixCylRef = useRef<THREE.InstancedMesh>(null);
   const crane = useMemo(() => buildCrane(s.crane.height, s.crane.reach), [s]);
   const details = useMemo(() => {
     const start: number[] = [];
@@ -424,10 +551,12 @@ const Erection: React.FC<{ s: Structure; plan: Timeline; time: React.RefObject<n
     const pslot: number[] = [];
     const pcount: Record<PanelKind, number> = { deck: 0, roof: 0, wall: 0, glass: 0, belt: 0 };
     s.panels.forEach((p) => pslot.push(pcount[p.kind]++));
-    return { slot, count, pslot, pcount };
+    const fcount = { box: 0, cyl: 0 };
+    const fslot = s.fixtures.map((f) => (f.round ? fcount.cyl++ : fcount.box++));
+    return { slot, count, pslot, pcount, fslot, fcount };
   }, [s]);
 
-  const cursor = useRef({ member: 0, panel: 0, angle: Math.PI / 4, radius: s.crane.reach * 0.5, hookY: s.crane.height * 0.6 });
+  const cursor = useRef({ member: 0, panel: 0, fixture: 0, angle: Math.PI / 4, radius: s.crane.reach * 0.5, hookY: s.crane.height * 0.6 });
   const tmp = useMemo(() => new THREE.Matrix4(), []);
 
   useLayoutEffect(() => {
@@ -443,6 +572,12 @@ const Erection: React.FC<{ s: Structure; plan: Timeline; time: React.RefObject<n
     for (const mesh of [iRef.current, boxRef.current, cylRef.current]) if (mesh?.instanceColor) mesh.instanceColor.needsUpdate = true;
     details.mats.forEach((_, k) => detailRef.current?.setMatrixAt(k, HIDDEN));
     s.panels.forEach((p, j) => panelRefs[p.kind].current?.setMatrixAt(layout.pslot[j], HIDDEN));
+    s.fixtures.forEach((f, j) => {
+      const mesh = (f.round ? fixCylRef : fixBoxRef).current;
+      mesh?.setMatrixAt(layout.fslot[j], HIDDEN);
+      mesh?.setColorAt(layout.fslot[j], color.set(f.color));
+    });
+    for (const mesh of [fixBoxRef.current, fixCylRef.current]) if (mesh?.instanceColor) mesh.instanceColor.needsUpdate = true;
   }, [layout, s, panelRefs, memberRefs, details]);
 
   useFrame((_, dt) => {
@@ -490,6 +625,17 @@ const Erection: React.FC<{ s: Structure; plan: Timeline; time: React.RefObject<n
       touched.add(mesh);
       if (k >= 1 && j === c.panel) c.panel++;
     }
+
+    // Fit-out and temporary works grow into place behind the steel
+    for (let j = c.fixture; j < s.fixtures.length && plan.fixtureStart[j] <= T; j++) {
+      const f = s.fixtures[j];
+      const k = Math.min(1, (T - plan.fixtureStart[j]) / GROW_S);
+      const mesh = (f.round ? fixCylRef : fixBoxRef).current;
+      if (!mesh) continue;
+      mesh.setMatrixAt(layout.fslot[j], fixtureMatrix(f, tmp, easeOut(k)));
+      touched.add(mesh);
+      if (k >= 1 && j === c.fixture) c.fixture++;
+    }
     touched.forEach((m) => (m.instanceMatrix.needsUpdate = true));
 
     // Laydown stack is drawn down as members are lifted out
@@ -533,6 +679,8 @@ const Erection: React.FC<{ s: Structure; plan: Timeline; time: React.RefObject<n
       {layout.count.i > 0 && <instancedMesh ref={iRef} args={[UNIT_I, mats.steel, layout.count.i]} castShadow receiveShadow frustumCulled={false} />}
       {layout.count.box > 0 && <instancedMesh ref={boxRef} args={[UNIT_BOX, mats.steel, layout.count.box]} castShadow receiveShadow frustumCulled={false} />}
       {layout.count.cyl > 0 && <instancedMesh ref={cylRef} args={[UNIT_CYL, mats.pipe, layout.count.cyl]} castShadow receiveShadow frustumCulled={false} />}
+      {layout.fcount.box > 0 && <instancedMesh ref={fixBoxRef} args={[UNIT_BOX, mats.fixture, layout.fcount.box]} castShadow receiveShadow frustumCulled={false} />}
+      {layout.fcount.cyl > 0 && <instancedMesh ref={fixCylRef} args={[UNIT_CYL, mats.fixture, layout.fcount.cyl]} castShadow receiveShadow frustumCulled={false} />}
       {details.mats.length > 0 && <instancedMesh ref={detailRef} args={[UNIT_BOX, mats.steel, details.mats.length]} castShadow frustumCulled={false} />}
       {s.statics.map((b, k) => (
         <mesh key={k} ref={(m) => void (staticRefs.current[k] = m)} position={b.pos} material={mats.static} castShadow receiveShadow>
@@ -603,6 +751,7 @@ const makeSiteMaterials = (): SiteMaterials => ({
   steel: new THREE.MeshStandardMaterial({ color: COLOR.steel, metalness: 0.45, roughness: 0.5 }),
   pipe: new THREE.MeshStandardMaterial({ color: '#ffffff', metalness: 0.4, roughness: 0.45 }),
   static: new THREE.MeshStandardMaterial({ color: '#B9BDC3', roughness: 0.95 }),
+  fixture: new THREE.MeshStandardMaterial({ color: '#ffffff', metalness: 0.2, roughness: 0.6 }),
   deck: new THREE.MeshStandardMaterial({ color: COLOR.deck, roughness: 0.85 }),
   roof: new THREE.MeshStandardMaterial({ map: siteTextures().roof, metalness: 0.25, roughness: 0.55 }),
   wall: new THREE.MeshStandardMaterial({ map: siteTextures().wall, roughness: 0.7 }),
@@ -620,6 +769,33 @@ const TRUCK_MATS = {
   timber: new THREE.MeshStandardMaterial({ color: '#9C7A52', roughness: 0.95 }),
   window: new THREE.MeshStandardMaterial({ color: '#3D5573', roughness: 0.25, metalness: 0.2 })
 };
+
+const DRESS_MATS = {
+  skip: new THREE.MeshStandardMaterial({ color: '#E2A60F', roughness: 0.7 }),
+  rubble: new THREE.MeshStandardMaterial({ color: '#8A8075', roughness: 1 }),
+  toilet: new THREE.MeshStandardMaterial({ color: '#2F7FC1', roughness: 0.6 }),
+  roof: new THREE.MeshStandardMaterial({ color: '#E9ECEF', roughness: 0.6 }),
+  mast: new THREE.MeshStandardMaterial({ color: '#C2C7CE', roughness: 0.5, metalness: 0.3 }),
+  lamp: new THREE.MeshBasicMaterial({ color: '#FFF6D8' }),
+  asphalt: new THREE.MeshStandardMaterial({ color: '#9EA4AC', roughness: 1 }),
+  trunk: new THREE.MeshStandardMaterial({ color: '#7A5E44', roughness: 1 }),
+  leaf: new THREE.MeshStandardMaterial({ color: '#6E8B4E', roughness: 0.95, flatShading: true }),
+  leafDark: new THREE.MeshStandardMaterial({ color: '#56723D', roughness: 0.95, flatShading: true })
+};
+
+const Tree: React.FC<{ position: V3; size?: number; dark?: boolean }> = ({ position, size = 1, dark }) => (
+  <group position={position} scale={size}>
+    <mesh position={[0, 0.06, 0]} material={DRESS_MATS.trunk} castShadow>
+      <cylinderGeometry args={[0.012, 0.016, 0.12, 6]} />
+    </mesh>
+    <mesh position={[0, 0.17, 0]} material={dark ? DRESS_MATS.leafDark : DRESS_MATS.leaf} castShadow>
+      <icosahedronGeometry args={[0.09, 0]} />
+    </mesh>
+    <mesh position={[0.04, 0.13, 0.03]} material={dark ? DRESS_MATS.leaf : DRESS_MATS.leafDark} castShadow>
+      <icosahedronGeometry args={[0.06, 0]} />
+    </mesh>
+  </group>
+);
 
 // Rigid flatbed delivering a load of steel, parked facing +x
 const Truck: React.FC<{ position: V3; steel: THREE.Material }> = ({ position, steel }) => (
@@ -698,9 +874,102 @@ const SiteDressing: React.FC<{ s: Structure; mats: SiteMaterials; stackRefs: Rea
           castShadow
         />
       ))}
-      {truckX - 0.45 > 0.2 && <Truck position={[truckX, 0, back + 0.32]} steel={mats.steel} />}
+      {truckX - 0.45 > 0.2 && (
+        <>
+          <mesh position={[truckX, 0.002, back + 0.32]} material={DRESS_MATS.asphalt} receiveShadow>
+            <boxGeometry args={[1.15, 0.004, 0.36]} />
+          </mesh>
+          <Truck position={[truckX, 0, back + 0.32]} steel={mats.steel} />
+        </>
+      )}
+      {/* Welfare: portable toilets beside the cabins */}
+      {[0, 1].map((k) => (
+        <group key={k} position={[-hx + 0.58 + k * 0.085, 0, back + 0.1]}>
+          <mesh position={[0, 0.07, 0]} material={DRESS_MATS.toilet} castShadow>
+            <boxGeometry args={[0.07, 0.14, 0.07]} />
+          </mesh>
+          <mesh position={[0, 0.145, 0]} material={DRESS_MATS.roof}>
+            <boxGeometry args={[0.075, 0.01, 0.075]} />
+          </mesh>
+        </group>
+      ))}
+      {/* Waste skip at the front corner */}
+      <group position={[-hx + 0.2, 0, front - 0.12]}>
+        <mesh position={[0, 0.05, 0]} material={DRESS_MATS.skip} castShadow>
+          <boxGeometry args={[0.26, 0.1, 0.15]} />
+        </mesh>
+        <mesh position={[0, 0.1, 0]} material={DRESS_MATS.rubble}>
+          <boxGeometry args={[0.23, 0.012, 0.12]} />
+        </mesh>
+      </group>
+      {/* Lighting tower on its trailer */}
+      <group position={[-hx + 0.1, 0, (back + front) / 2 + 0.2]}>
+        <mesh position={[0, 0.03, 0]} material={DRESS_MATS.mast} castShadow>
+          <boxGeometry args={[0.08, 0.05, 0.14]} />
+        </mesh>
+        <mesh position={[0, 0.3, 0]} material={DRESS_MATS.mast} castShadow>
+          <boxGeometry args={[0.014, 0.5, 0.014]} />
+        </mesh>
+        <mesh position={[0.012, 0.56, 0]} material={TRUCK_MATS.chassis} castShadow>
+          <boxGeometry args={[0.02, 0.05, 0.13]} />
+        </mesh>
+        {[-0.04, 0, 0.04].map((z) => (
+          <mesh key={z} position={[0.023, 0.56, z]} material={DRESS_MATS.lamp}>
+            <boxGeometry args={[0.004, 0.035, 0.03]} />
+          </mesh>
+        ))}
+      </group>
+      {/* Street trees just outside the hoarding */}
+      <Tree position={[hx + 0.15, 0, front - 0.1]} />
+      <Tree position={[hx + 0.18, 0, front - 0.5]} size={0.8} dark />
+      <Tree position={[-hx - 0.16, 0, back + 0.3]} size={0.9} />
+      <Tree position={[-hx - 0.14, 0, front - 0.2]} size={0.75} dark />
     </group>
   );
+};
+
+// Low-rise blocks clustered round each city pin, densest and tallest at the centre
+const CITY_MAT = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.8 });
+const CITY_TONES = ['#F4F5F7', '#E3E6EA', '#D3D8DE', '#C4CAD2', '#FBE3CF'];
+const CityBlocks: React.FC<{ at: THREE.Vector3; seed: number }> = ({ at, seed }) => {
+  const ref = useRef<THREE.InstancedMesh>(null);
+  const count = 46;
+  const [rings, setRings] = useState<Ring[] | null>(null);
+  useEffect(() => {
+    let alive = true;
+    loadLandRings()
+      .then((r) => alive && setRings(r))
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, []);
+  useLayoutEffect(() => {
+    const mesh = ref.current;
+    if (!mesh || !rings) return;
+    let st = seed * 9973 + 17;
+    const r = () => ((st = (st * 16807) % 2147483647) - 1) / 2147483646;
+    const m = new THREE.Matrix4(), q = new THREE.Quaternion().setFromAxisAngle(UP, SITE_ROTATION), col = new THREE.Color();
+    for (let k = 0, tries = 0; k < count; k++) {
+      const ang = r() * Math.PI * 2, rad = 0.09 + Math.pow(r(), 1.4) * 0.2;
+      const x = at.x + Math.cos(ang) * rad, z = at.z + Math.sin(ang) * rad * 0.8;
+      // Only build on land; give up on a plot after enough misses (small islands)
+      if (!ashore(rings, x / K, -z / K)) {
+        mesh.setMatrixAt(k, HIDDEN);
+        if (++tries < 400) k--;
+        continue;
+      }
+      const h = (0.02 + r() * 0.05) * (1.5 - rad * 2.5) + (r() < 0.08 ? 0.07 : 0);
+      const w = 0.02 + r() * 0.025, d = 0.02 + r() * 0.025;
+      m.compose(_c.set(x, at.y + h / 2, z), q, _u.set(w, h, d));
+      mesh.setMatrixAt(k, m);
+      mesh.setColorAt(k, col.set(CITY_TONES[Math.floor(r() * CITY_TONES.length)]));
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    mesh.computeBoundingSphere();
+  }, [at, seed, rings]);
+  return <instancedMesh ref={ref} args={[UNIT_BOX, CITY_MAT, count]} visible={!!rings} castShadow receiveShadow />;
 };
 
 type SiteProps = {
@@ -719,6 +988,7 @@ const Site: React.FC<SiteProps> = ({ index, def, reduced, onIssue, anchors }) =>
   const phase = useRef({ issuedAt: -1, fresh: true });
   const pos = useMemo(() => toWorld(def.at[0], def.at[1], LAND_H), [def]);
   const pin = useMemo(() => toWorld(def.lon, def.lat, LAND_H + 0.004), [def]);
+  const city = useMemo(() => toWorld(def.lon, def.lat, LAND_H), [def]);
   // Label sits just in front of the slab's nearest corner, whatever the footprint.
   const labelOffset = useMemo(() => {
     const hx = s.half[0] + SLAB.side, back = -s.half[1] - SLAB.back, front = s.half[1] + SLAB.front;
@@ -769,7 +1039,7 @@ const Site: React.FC<SiteProps> = ({ index, def, reduced, onIssue, anchors }) =>
 
   return (
     <group>
-      <Line points={[pin, new THREE.Vector3(pos.x, LAND_H + 0.004, pos.z)]} color={COLOR.ink} lineWidth={1} transparent opacity={0.55} />
+      <Line points={[pin, new THREE.Vector3(pos.x, LAND_H + 0.004, pos.z)]} color={COLOR.ink} lineWidth={2} transparent opacity={0.7} />
       <mesh position={pin} castShadow>
         <cylinderGeometry args={[0.075, 0.075, 0.03, 24]} />
         <meshStandardMaterial color={COLOR.ink} />
@@ -778,8 +1048,14 @@ const Site: React.FC<SiteProps> = ({ index, def, reduced, onIssue, anchors }) =>
         <cylinderGeometry args={[0.035, 0.035, 0.02, 16]} />
         <meshBasicMaterial color="#ffffff" />
       </mesh>
+      <CityBlocks at={city} seed={index + 1} />
 
       <group position={pos} rotation-y={SITE_ROTATION} scale={s.scale}>
+        {/* Compacted earth apron around the site, with a concrete hardstanding where the building goes */}
+        <mesh position={[0, -0.02, (SLAB.front - SLAB.back) / 2]} receiveShadow castShadow>
+          <boxGeometry args={[s.half[0] * 2 + SLAB.side * 2 + 0.3, 0.04, s.half[1] * 2 + SLAB.back + SLAB.front + 0.3]} />
+          <meshStandardMaterial color={COLOR.earth} roughness={1} />
+        </mesh>
         <mesh position={[0, -0.01, (SLAB.front - SLAB.back) / 2]} receiveShadow castShadow>
           <boxGeometry args={[s.half[0] * 2 + SLAB.side * 2, 0.06, s.half[1] * 2 + SLAB.back + SLAB.front]} />
           <meshStandardMaterial color={COLOR.slab} roughness={0.95} />
@@ -799,50 +1075,108 @@ const HQ_POS = toWorld(HQ_DEF.lon, HQ_DEF.lat, LAND_H);
 const TOWER = { w: 0.95, d: 0.95, h: 2.2, x: -0.25, z: -0.15, base: 0.5 };
 const HQ_ROOF = new THREE.Vector3(HQ_POS.x + TOWER.x, LAND_H + TOWER.base + TOWER.h + 0.12, HQ_POS.z + TOWER.z);
 
+// Curtain-wall glazing: one pane per bay and floor, a few lit or blind-drawn, with a sky reflection over the top
+const facadeTexture = (cols: number, rows: number) =>
+  canvasTexture(256, 256, (g) => {
+    let st = 11;
+    const r = () => ((st = (st * 16807) % 2147483647) - 1) / 2147483646;
+    const pw = 256 / cols, ph = 256 / rows;
+    for (let j = 0; j < rows; j++)
+      for (let i = 0; i < cols; i++) {
+        const t = r();
+        g.fillStyle = t < 0.12 ? '#C9D8E8' : t < 0.22 ? '#5A7598' : `hsl(212, 32%, ${44 + r() * 12}%)`;
+        g.fillRect(i * pw, j * ph, pw, ph);
+        g.fillStyle = 'rgba(30,42,60,0.35)';
+        g.fillRect(i * pw, j * ph + ph * 0.78, pw, ph * 0.22);
+        g.fillStyle = 'rgba(238,242,246,0.8)';
+        g.fillRect(i * pw + pw / 2 - 0.6, j * ph, 1.2, ph * 0.78);
+      }
+    const sky = g.createLinearGradient(0, 0, 256, 256);
+    sky.addColorStop(0, 'rgba(255,255,255,0.28)');
+    sky.addColorStop(0.5, 'rgba(255,255,255,0)');
+    sky.addColorStop(1, 'rgba(255,255,255,0.12)');
+    g.fillStyle = sky;
+    g.fillRect(0, 0, 256, 256);
+  });
+
+const HQ_MATS = (() => {
+  let m: Record<'tower' | 'podium' | 'mullion' | 'plant' | 'fan' | 'green' | 'paving' | 'asphalt', THREE.MeshStandardMaterial> | null = null;
+  return () =>
+    (m ??= {
+      tower: new THREE.MeshStandardMaterial({ map: facadeTexture(7, 11), metalness: 0.35, roughness: 0.18 }),
+      podium: new THREE.MeshStandardMaterial({ map: facadeTexture(14, 2), metalness: 0.35, roughness: 0.2 }),
+      mullion: new THREE.MeshStandardMaterial({ color: COLOR.mullion }),
+      plant: new THREE.MeshStandardMaterial({ color: '#C4CAD3', roughness: 0.6 }),
+      fan: new THREE.MeshStandardMaterial({ color: '#4A525D', roughness: 0.6 }),
+      green: new THREE.MeshStandardMaterial({ color: '#8DAA62', roughness: 1 }),
+      paving: new THREE.MeshStandardMaterial({ color: '#D9DCE0', roughness: 0.95 }),
+      asphalt: new THREE.MeshStandardMaterial({ color: '#6B7078', roughness: 1 })
+    });
+})();
+const BAY_PAINT = new THREE.MeshBasicMaterial({ color: '#F2F3F5' });
+const CAR_COLORS = ['#E9ECEF', '#2B2F36', '#9AA1AA', '#B5473A', '#1270F9', '#E9ECEF', '#5D6B7A', '#C9CED6'];
+
 const HeadOffice: React.FC = () => {
   const floors = 11;
   const fh = TOWER.h / floors;
   const fins = 7;
+  const mats = HQ_MATS();
+  const podTop = 0.05 + TOWER.base;
   return (
     <group position={HQ_POS} rotation-y={SITE_ROTATION}>
-      <mesh position={[0, 0.025, 0]} receiveShadow>
-        <boxGeometry args={[2.6, 0.05, 2.1]} />
-        <meshStandardMaterial color={COLOR.slab} roughness={0.95} />
+      <mesh position={[0.3, 0.025, 0.05]} material={mats.paving} receiveShadow>
+        <boxGeometry args={[3.3, 0.05, 2.3]} />
       </mesh>
-      {/* Podium */}
-      <mesh position={[0.1, 0.05 + TOWER.base / 2, 0.1]} castShadow receiveShadow>
-        <boxGeometry args={[2.1, TOWER.base, 1.6]} />
-        <meshStandardMaterial color={COLOR.glass} metalness={0.35} roughness={0.2} />
-      </mesh>
-      {[0.05, 0.05 + TOWER.base / 2, 0.05 + TOWER.base].map((y) => (
-        <mesh key={y} position={[0.1, y, 0.1]} castShadow>
-          <boxGeometry args={[2.16, 0.035, 1.66]} />
-          <meshStandardMaterial color={COLOR.mullion} />
+      {/* Lawns either side of the entrance plaza */}
+      {[-0.75, 0.75].map((x) => (
+        <mesh key={x} position={[x + 0.1, 0.052, 1.03]} material={mats.green} receiveShadow>
+          <boxGeometry args={[0.95, 0.006, 0.22]} />
         </mesh>
       ))}
+      {/* Podium */}
+      <mesh position={[0.1, 0.05 + TOWER.base / 2, 0.1]} material={mats.podium} castShadow receiveShadow>
+        <boxGeometry args={[2.1, TOWER.base, 1.6]} />
+      </mesh>
+      {[0.05, 0.05 + TOWER.base / 2, podTop].map((y) => (
+        <mesh key={y} position={[0.1, y, 0.1]} material={mats.mullion} castShadow>
+          <boxGeometry args={[2.16, 0.035, 1.66]} />
+        </mesh>
+      ))}
+      {/* Entrance canopy on slender columns */}
+      <mesh position={[0.1, 0.26, 1.02]} material={mats.mullion} castShadow>
+        <boxGeometry args={[0.6, 0.025, 0.24]} />
+      </mesh>
+      {[-0.17, 0.37].map((x) => (
+        <mesh key={x} position={[x, 0.15, 1.11]} material={mats.mullion} castShadow>
+          <cylinderGeometry args={[0.01, 0.01, 0.2, 8]} />
+        </mesh>
+      ))}
+      {/* Green roof and terrace planting on the podium */}
+      <mesh position={[0.72, podTop + 0.022, 0.1]} material={mats.green} receiveShadow>
+        <boxGeometry args={[0.78, 0.012, 1.4]} />
+      </mesh>
+      {[[0.55, -0.4], [0.9, 0.05], [0.6, 0.55], [0.95, 0.65]].map(([x, z]) => (
+        <Tree key={`${x}${z}`} position={[x, podTop + 0.02, z]} size={0.9} dark={x > 0.8} />
+      ))}
       {/* Tower */}
-      <group position={[TOWER.x, 0.05 + TOWER.base, TOWER.z]}>
-        <mesh position={[0, TOWER.h / 2, 0]} castShadow receiveShadow>
+      <group position={[TOWER.x, podTop, TOWER.z]}>
+        <mesh position={[0, TOWER.h / 2, 0]} material={mats.tower} castShadow receiveShadow>
           <boxGeometry args={[TOWER.w, TOWER.h, TOWER.d]} />
-          <meshStandardMaterial color={COLOR.glass} metalness={0.35} roughness={0.18} />
         </mesh>
         {Array.from({ length: floors + 1 }, (_, f) => (
-          <mesh key={f} position={[0, f * fh, 0]}>
+          <mesh key={f} position={[0, f * fh, 0]} material={mats.mullion}>
             <boxGeometry args={[TOWER.w + 0.03, 0.022, TOWER.d + 0.03]} />
-            <meshStandardMaterial color={COLOR.mullion} />
           </mesh>
         ))}
         {Array.from({ length: fins }, (_, i) => {
           const o = -TOWER.w / 2 + (TOWER.w * (i + 0.5)) / fins;
           return (
             <group key={i}>
-              <mesh position={[o, TOWER.h / 2, TOWER.d / 2 + 0.012]}>
+              <mesh position={[o, TOWER.h / 2, TOWER.d / 2 + 0.012]} material={mats.mullion}>
                 <boxGeometry args={[0.018, TOWER.h, 0.03]} />
-                <meshStandardMaterial color={COLOR.mullion} />
               </mesh>
-              <mesh position={[TOWER.w / 2 + 0.012, TOWER.h / 2, o]}>
+              <mesh position={[TOWER.w / 2 + 0.012, TOWER.h / 2, o]} material={mats.mullion}>
                 <boxGeometry args={[0.03, TOWER.h, 0.018]} />
-                <meshStandardMaterial color={COLOR.mullion} />
               </mesh>
             </group>
           );
@@ -858,11 +1192,62 @@ const HeadOffice: React.FC = () => {
           <boxGeometry args={[TOWER.w + 0.035, 0.012, TOWER.d + 0.035]} />
           <meshStandardMaterial color="#EEF1F5" />
         </mesh>
-        <mesh position={[0.15, TOWER.h + 0.17, -0.1]} castShadow>
+        {/* Roof plant: lift overrun, cooling towers and a communications mast */}
+        <mesh position={[0.15, TOWER.h + 0.17, -0.1]} material={mats.plant} castShadow>
           <boxGeometry args={[0.4, 0.12, 0.35]} />
-          <meshStandardMaterial color="#C4CAD3" />
+        </mesh>
+        {[-0.22, 0.02].map((x) => (
+          <group key={x} position={[x, TOWER.h + 0.13, 0.26]}>
+            <mesh position={[0, 0.045, 0]} material={mats.plant} castShadow>
+              <boxGeometry args={[0.18, 0.09, 0.18]} />
+            </mesh>
+            <mesh position={[0, 0.095, 0]} material={mats.fan}>
+              <cylinderGeometry args={[0.07, 0.07, 0.012, 16]} />
+            </mesh>
+          </group>
+        ))}
+        <mesh position={[-0.3, TOWER.h + 0.33, -0.28]} material={mats.plant} castShadow>
+          <cylinderGeometry args={[0.008, 0.012, 0.4, 6]} />
         </mesh>
       </group>
+      {/* Staff car park with marked bays */}
+      <mesh position={[1.55, 0.052, 0.05]} material={mats.asphalt} receiveShadow>
+        <boxGeometry args={[0.7, 0.006, 2.0]} />
+      </mesh>
+      {Array.from({ length: 11 }, (_, k) => (
+        <group key={k}>
+          {[1.33, 1.77].map((x) => (
+            <mesh key={x} position={[x, 0.056, -0.85 + k * 0.17]} material={BAY_PAINT}>
+              <boxGeometry args={[0.2, 0.002, 0.008]} />
+            </mesh>
+          ))}
+        </group>
+      ))}
+      {Array.from({ length: 20 }, (_, k) => {
+        const side = k % 2, slot = Math.floor(k / 2);
+        if ((k * 7) % 5 === 0) return null;
+        return (
+          <group key={k} position={[side ? 1.76 : 1.34, 0.055, -0.765 + slot * 0.17]}>
+            <mesh position={[0, 0.02, 0]} castShadow>
+              <boxGeometry args={[0.16, 0.04, 0.085]} />
+              <meshStandardMaterial color={CAR_COLORS[k % CAR_COLORS.length]} roughness={0.35} metalness={0.3} />
+            </mesh>
+            <mesh position={[side ? 0.012 : -0.012, 0.05, 0]} material={TRUCK_MATS.glass}>
+              <boxGeometry args={[0.085, 0.022, 0.075]} />
+            </mesh>
+          </group>
+        );
+      })}
+      {/* Trees along the plaza edge and the car park */}
+      {[-1.15, -0.85, 0.95, 1.95].map((x, k) => (
+        <Tree key={x} position={[x, 0.05, 1.03]} size={1.15} dark={k % 2 === 1} />
+      ))}
+      {[-0.75, -0.35, 0.05, 0.45, 0.85].map((z, k) => (
+        <Tree key={z} position={[1.98, 0.05, z]} size={1.1} dark={k % 2 === 0} />
+      ))}
+      {[-0.6, 0, 0.6].map((z) => (
+        <Tree key={z} position={[-1.15, 0.05, z]} size={1.2} />
+      ))}
     </group>
   );
 };
@@ -934,9 +1319,9 @@ const Routes: React.FC<{ sites: SiteDef[]; packets: React.RefObject<Packet[]> }>
 
   return (
     <group>
-      <Line points={[HQ_ROOF, SPLIT]} color={COLOR.ink} lineWidth={1.6} transparent opacity={0.6} />
+      <Line points={[HQ_ROOF, SPLIT]} color={COLOR.ink} lineWidth={3.2} transparent opacity={0.75} />
       {curves.map((c, i) => (
-        <Line key={i} points={c.branch.getPoints(64)} color={COLOR.ink} lineWidth={1.1} transparent opacity={0.38} />
+        <Line key={i} points={c.branch.getPoints(64)} color={COLOR.ink} lineWidth={2.4} transparent opacity={0.55} />
       ))}
       <mesh position={SPLIT}>
         <sphereGeometry args={[0.06, 16, 12]} />
@@ -1033,7 +1418,8 @@ const SceneContents: React.FC<SceneProps & { reduced: boolean }> = ({ sites, red
     <>
       <CameraRig />
       <LabelProjector anchors={anchors} labels={labels} />
-      <hemisphereLight args={['#ffffff', '#d8dde5', 2.3]} />
+      <Reflections />
+      <hemisphereLight args={['#ffffff', '#d8dde5', 1.9]} />
       <directionalLight
         ref={light}
         position={TARGET.clone().addScaledVector(LIGHT_DIR, 30).toArray()}

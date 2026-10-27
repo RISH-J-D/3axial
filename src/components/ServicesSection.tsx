@@ -118,7 +118,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ srv, idx, onOpenEnquire }) =>
           transformStyle: 'preserve-3d',
           ['--glow' as string]: rgb
         }}
-        className="group relative flex h-full flex-col overflow-hidden rounded-[14px] border border-line bg-gradient-to-b from-white to-surface p-7 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_2px_4px_rgba(20,33,61,0.04),0_18px_40px_-18px_rgba(var(--glow),0.35)] transition-shadow duration-300 hover:shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_4px_8px_rgba(20,33,61,0.05),0_34px_60px_-22px_rgba(var(--glow),0.5)] lg:p-8"
+        className="group relative flex h-full flex-col overflow-hidden rounded-[6px] border border-line bg-gradient-to-b from-white to-surface p-7 shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_2px_4px_rgba(20,33,61,0.04),0_18px_40px_-18px_rgba(var(--glow),0.35)] transition-shadow duration-300 hover:shadow-[0_1px_0_rgba(255,255,255,0.9)_inset,0_4px_8px_rgba(20,33,61,0.05),0_34px_60px_-22px_rgba(var(--glow),0.5)] lg:p-8"
       >
         {/* Top colour bar */}
         <span className={`absolute inset-x-0 top-0 h-[3px] ${t.solid}`} />
@@ -205,7 +205,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenEnquire 
       <div className="container-x relative">
         <div className="max-w-2xl">
           <span className="eyebrow">Capabilities</span>
-          <h2 className="h-section mt-5">End-to-end steel detailing services.</h2>
+          <h2 className="h-section mt-6">End-to-end steel <em className="text-brand">detailing</em> services.</h2>
           <p className="lead mt-5">
             From pre-bid tender models to certified connection design and shop-ready fabrication drawings.
           </p>

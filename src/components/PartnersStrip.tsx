@@ -13,8 +13,8 @@ export const PartnersStrip: React.FC = () => {
       <div className="container-x grid grid-cols-1 items-center gap-10 py-16 lg:grid-cols-12 lg:py-20">
         <div className="lg:col-span-4">
           <span className="eyebrow eyebrow-green">Licensed Software</span>
-          <h2 className="mt-4 font-display text-[26px] font-semibold leading-[1.15] tracking-[-0.02em] text-ink sm:text-[30px]">
-            Working natively in the platforms your team already uses.
+          <h2 className="mt-5 font-display text-[28px] font-semibold leading-[1.1] tracking-[-0.025em] text-ink sm:text-[32px]">
+            Working natively in the platforms your team <em className="text-green-dark">already uses.</em>
           </h2>
         </div>
         <div className="grid grid-cols-2 border-l border-t border-line sm:grid-cols-4 lg:col-span-8">

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X, ArrowUpRight } from 'lucide-react';
+import { Search, X, ArrowUpRight, MapPin } from 'lucide-react';
 import type { Project } from '../types';
 import { PROJECTS_DATA } from '../data/siteData';
+import { tone } from '../theme';
 
 type Filter = 'all' | 'completed' | 'ongoing' | 'commercial' | 'industrial' | 'educational';
 
@@ -18,6 +19,88 @@ const FILTERS: { id: Filter; label: string }[] = [
 interface ProjectsGalleryProps {
   onOpenEnquire?: () => void;
 }
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+// Editorial rhythm in groups of seven: wide-narrow / narrow-wide / three narrow, so every row fills.
+const isWide = (i: number) => i % 7 === 0 || i % 7 === 3;
+
+// A Tekla model view that turns into a blueprint on hover: the white sheet is inverted and screened over blue.
+const ProjectCard: React.FC<{ proj: Project; idx: number; onOpen: () => void }> = ({ proj, idx, onOpen }) => {
+  const wide = isWide(idx);
+  const t = tone(idx);
+  const [tons, unit] = (proj.tonnage ?? '').split(' ');
+  return (
+    <motion.button
+      layout
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 12 }}
+      transition={{ duration: 0.6, delay: (idx % 3) * 0.07, ease: EASE }}
+      className={`group flex flex-col text-left ${wide ? 'lg:col-span-2' : ''}`}
+      onClick={onOpen}
+    >
+      <div className={`relative isolate overflow-hidden bg-white ring-1 ring-inset ring-ink/10 ${wide ? 'aspect-[4/3] lg:aspect-[2/1]' : 'aspect-[4/3]'}`}>
+        <img
+          src={proj.image}
+          alt={proj.title}
+          className="h-full w-full object-cover transition-[transform,filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] group-hover:[filter:invert(1)_contrast(1.15)]"
+        />
+        <span aria-hidden="true" className="absolute inset-0 bg-[#0B4FB3] opacity-0 mix-blend-screen transition-opacity duration-700 group-hover:opacity-100" />
+        {/* Drafting grid shows through on the blueprint */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
+            backgroundSize: '40px 40px'
+          }}
+        />
+
+        {/* Sheet index */}
+        <span className={`absolute left-5 top-5 flex h-10 w-10 items-center justify-center bg-white font-serif text-[20px] italic shadow-sm ${t.text}`}>
+          {String(idx + 1).padStart(2, '0')}
+        </span>
+        {/* Status */}
+        <span className="absolute right-5 top-5 flex items-center gap-2 bg-white px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-ink shadow-sm">
+          <span className={`h-1.5 w-1.5 rounded-full ${proj.category === 'ongoing' ? 'bg-accent animate-pulse' : 'bg-green'}`} />
+          {proj.category === 'ongoing' ? 'In progress' : 'Delivered'}
+        </span>
+
+        {/* Title block rises into the frame on hover */}
+        <span className="absolute inset-x-0 bottom-0 flex translate-y-full items-center justify-between gap-4 bg-night/90 px-6 py-4 text-white backdrop-blur-sm transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">View project sheet</span>
+          <ArrowUpRight className="h-4 w-4 text-accent" strokeWidth={1.75} />
+        </span>
+      </div>
+
+      <div className="mt-6 flex items-start justify-between gap-6 border-t border-line pt-5">
+        <div className="min-w-0">
+          <span className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${t.text}`}>{proj.sector}</span>
+          <h3
+            className={`mt-2 font-display font-semibold leading-[1.15] tracking-[-0.02em] text-ink transition-colors group-hover:text-brand ${
+              wide ? 'text-[24px] lg:text-[30px]' : 'text-[22px]'
+            }`}
+          >
+            {proj.title}
+          </h3>
+          {proj.location && (
+            <p className="mt-2 flex items-center gap-1.5 text-[14px] text-muted">
+              <MapPin className="h-3.5 w-3.5" strokeWidth={1.75} />
+              {proj.location}
+            </p>
+          )}
+        </div>
+        {tons && (
+          <div className="shrink-0 text-right">
+            <div className="font-display text-[26px] font-semibold leading-none tracking-[-0.03em] text-ink">{tons}</div>
+            <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.18em] text-muted">{unit ?? 'tons'} of steel</div>
+          </div>
+        )}
+      </div>
+    </motion.button>
+  );
+};
 
 export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenEnquire }) => {
   const [filter, setFilter] = useState<Filter>('all');
@@ -40,10 +123,12 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenEnquire 
       (proj.tonnage?.toLowerCase().includes(q) ?? false);
     return matchesFilter && matchesSearch;
   });
+  const totalTons = filteredProjects.reduce((sum, p) => sum + (parseInt((p.tonnage ?? '').replace(/,/g, ''), 10) || 0), 0);
 
   return (
-    <section className="section bg-white">
-      <div className="container-x">
+    <section className="section relative overflow-hidden bg-white">
+      <div className="draft-grid-light absolute inset-0" />
+      <div className="container-x relative">
         {/* Controls */}
         <div className="flex flex-col gap-6 border-b border-line lg:flex-row lg:items-end lg:justify-between">
           <div className="-mb-px flex gap-7 overflow-x-auto">
@@ -69,50 +154,27 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenEnquire 
           </div>
         </div>
 
-        <p className="mt-6 text-[11px] uppercase tracking-[0.08em] text-muted">
-          {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
-        </p>
+        {/* Register line */}
+        <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
+          <span>
+            <span className="text-ink">{filteredProjects.length}</span> {filteredProjects.length === 1 ? 'project' : 'projects'}
+          </span>
+          {totalTons > 0 && (
+            <span>
+              <span className="text-ink">{totalTons.toLocaleString()}</span> tons detailed
+            </span>
+          )}
+          <span className="hidden items-center gap-2 sm:flex">
+            <span className="h-px w-6 bg-line" />
+            Hover a model to see it as a blueprint
+          </span>
+        </div>
 
         {/* Grid */}
-        <motion.div layout className="mt-8 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div layout className="mt-10 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence>
-            {filteredProjects.map((proj) => (
-              <motion.button
-                key={proj.id}
-                layout
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="group text-left"
-                onClick={() => setActiveLightbox(proj)}
-              >
-                <div className="relative aspect-[4/3] overflow-hidden bg-surface">
-                  <img
-                    src={proj.image}
-                    alt={proj.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                  />
-                  {proj.category === 'ongoing' && (
-                    <span className="absolute left-4 top-4 bg-white px-2.5 py-1 text-[11px] uppercase tracking-[0.08em] text-ink">
-                      Ongoing
-                    </span>
-                  )}
-                </div>
-                <div className="mt-5 flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="font-display text-[20px] font-semibold leading-[1.25] tracking-[-0.015em] text-ink transition-colors group-hover:text-brand">
-                      {proj.title}
-                    </h3>
-                    <p className="mt-2 text-[14px] text-muted">
-                      <span className="capitalize">{proj.sector}</span>
-                      {proj.location && <> · {proj.location}</>}
-                      {proj.tonnage && <> · {proj.tonnage}</>}
-                    </p>
-                  </div>
-                  <ArrowUpRight className="mt-1 h-5 w-5 flex-shrink-0 text-muted transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand" strokeWidth={1.5} />
-                </div>
-              </motion.button>
+            {filteredProjects.map((proj, idx) => (
+              <ProjectCard key={proj.id} proj={proj} idx={idx} onOpen={() => setActiveLightbox(proj)} />
             ))}
           </AnimatePresence>
         </motion.div>
@@ -122,9 +184,11 @@ export const ProjectsGallery: React.FC<ProjectsGalleryProps> = ({ onOpenEnquire 
         )}
 
         {onOpenEnquire && (
-          <div className="mt-24 flex flex-col items-start justify-between gap-6 border-t-2 border-brand pt-10 lg:flex-row lg:items-center">
+          <div className="mt-24 flex flex-col items-start justify-between gap-6 border-t border-line pt-10 lg:flex-row lg:items-center">
             <div>
-              <h3 className="font-display text-[26px] font-semibold tracking-[-0.02em] text-ink">Have a similar project?</h3>
+              <h3 className="font-display text-[28px] font-semibold tracking-[-0.025em] text-ink">
+                Have a <em className="text-accent-dark">similar</em> project?
+              </h3>
               <p className="mt-2 text-[15px] text-muted">
                 Send us your structural drawings — preliminary tender models and ABM lists in 24 to 48 hours.
               </p>
