@@ -11,9 +11,9 @@ interface HeroVideoBannerProps {
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 const HERO_STATS = [
-  { value: '800+', label: 'Projects delivered' },
+  { value: '1200+', label: 'Projects delivered' },
   { value: '5+', label: 'Countries served' },
-  { value: 'AISC · CISC', label: 'Detailing standards' },
+  { value: 'AISC · CISC · MM', label: 'Detailing standards' },
   { value: '24/7', label: 'Dual-shift support' }
 ];
 
@@ -105,9 +105,8 @@ export const HeroVideoBanner: React.FC<HeroVideoBannerProps> = ({ onOpenEnquire,
           {HERO_STATS.map((s, i) => (
             <div
               key={s.label}
-              className={`border-white/10 py-6 lg:py-[clamp(16px,2.6vh,32px)] ${i % 2 === 1 ? 'border-l pl-6' : ''} ${i > 0 ? 'lg:border-l lg:pl-8' : ''} ${
-                i >= 2 ? 'border-t lg:border-t-0' : ''
-              }`}
+              className={`border-white/10 py-6 lg:py-[clamp(16px,2.6vh,32px)] ${i % 2 === 1 ? 'border-l pl-6' : ''} ${i > 0 ? 'lg:border-l lg:pl-8' : ''} ${i >= 2 ? 'border-t lg:border-t-0' : ''
+                }`}
             >
               <div className="font-display text-[26px] font-semibold tracking-[-0.02em] text-white sm:text-[30px] lg:text-[clamp(22px,3.2vh,30px)]">
                 <CountUp value={s.value} />

@@ -14,7 +14,8 @@ interface ServicesPageProps {
 const CODE_STANDARDS = [
   { code: 'AISC 360-16', region: 'United States', desc: 'Specification for Structural Steel Buildings (LRFD and ASD).' },
   { code: 'AISC 341-16', region: 'United States — Seismic', desc: 'Seismic provisions for high-risk earthquake and wind loading zones.' },
-  { code: 'CSA S16', region: 'Canada', desc: 'Design of Steel Structures, per the Canadian Institute of Steel Construction.' },
+  { code: 'CSA S16 / CISC', region: 'Canada', desc: 'Design of Steel Structures, per the Canadian Institute of Steel Construction.' },
+  { code: 'MM Standards', region: 'Metric / International', desc: 'Metric (mm) steel detailing specifications and fabrication tolerances.' },
   { code: 'BS EN 1993', region: 'Europe / United Kingdom', desc: 'Eurocode 3 — design of steel structures for commercial and industrial assets.' },
   { code: 'AS 4100', region: 'Australia / New Zealand', desc: 'Steel structures code covering high-tensile bolting and member connections.' }
 ];

@@ -6,13 +6,9 @@ interface ContactQuoteSectionProps {
 }
 
 export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({ onShowToast }) => {
-  const [tonnage, setTonnage] = useState<number>(250);
   const [serviceType, setServiceType] = useState<string>('Structural Steel Detailing');
   const [designStandard, setDesignStandard] = useState<string>('AISC 360-16 (Imperial)');
   const [submitting, setSubmitting] = useState(false);
-
-  const estimatedHours = Math.round(tonnage * 2.8);
-  const estimatedCost = Math.round(tonnage * 18.5);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,15 +34,37 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({ onShow
 
           <dl className="mt-10 divide-y divide-line border-y border-line">
             <div className="py-6">
-              <dt className="text-[11px] uppercase tracking-[0.08em] text-muted">Registered Office</dt>
+              <dt className="text-[11px] uppercase tracking-[0.08em] text-muted">United States Office</dt>
               <dd className="mt-3 text-[15px] leading-relaxed text-ink">
-                3 Axial Steel Detailing Pvt. Ltd.
+                <span className="font-semibold text-ink">3 Axial Steel Detailing Services LLC</span>
+                <br />
+                5900 Balcones Dr Ste 100
+                <br />
+                Austin, TX 78731
+              </dd>
+            </div>
+            <div className="py-6">
+              <dt className="text-[11px] uppercase tracking-[0.08em] text-muted">Bengaluru Headquarters / Registered Office</dt>
+              <dd className="mt-3 text-[15px] leading-relaxed text-ink">
+                <span className="font-semibold text-ink">3 Axial Steel Detailing Pvt. Ltd.</span>
                 <br />
                 17B, 3rd Floor, Tech Mahindra Road
                 <br />
                 Opp. Tata Power Gate No. 01, Electronic City Phase 2
                 <br />
-                Bengaluru, Karnataka 560100
+                Bengaluru, Karnataka 560100, India
+              </dd>
+            </div>
+            <div className="py-6">
+              <dt className="text-[11px] uppercase tracking-[0.08em] text-muted">Coimbatore Branch Office</dt>
+              <dd className="mt-3 text-[15px] leading-relaxed text-ink">
+                <span className="font-semibold text-ink">3 Axial Steel Detailing Services Pvt. Ltd.</span>
+                <br />
+                Door No 438 A, 1st Floor, Kamarajar Rd
+                <br />
+                Peelamedu, Lakshmipuram
+                <br />
+                Coimbatore, Tamil Nadu 641004, India
               </dd>
             </div>
             <div className="py-6">
@@ -71,7 +89,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({ onShow
           <div className="mt-10 border-l-4 border-green bg-green-tint p-7">
             <h4 className="font-display text-[18px] font-semibold text-ink">Capability brochure</h4>
             <p className="mt-2 text-[14px] leading-relaxed text-muted">
-              Our capabilities, Tekla environment set-up and sample drawing sheets. PDF, 5.2 MB.
+              Explore our capabilities, Tekla environment set-up and sample drawings.
             </p>
             <button
               onClick={() => onShowToast('Brochure download started (3Axial-Corporate-Deck.pdf)')}
@@ -86,42 +104,7 @@ export const ContactQuoteSection: React.FC<ContactQuoteSectionProps> = ({ onShow
         {/* Quote form */}
         <div className="border-t-2 border-brand pt-10 lg:col-span-8 lg:col-start-5 lg:border-l lg:border-t-0 lg:pl-16 lg:pt-0">
           <h3 className="font-display text-[26px] font-semibold tracking-[-0.02em] text-ink">Request a quote</h3>
-          <p className="mt-2 text-[15px] text-muted">Use the estimator for an indicative figure, then send us your project details.</p>
-
-          {/* Estimator */}
-          <div className="mt-10 border border-line p-6 sm:p-8">
-            <div className="flex items-baseline justify-between gap-4">
-              <label htmlFor="tonnage" className="text-[11px] uppercase tracking-[0.08em] text-muted">
-                Estimated steel tonnage
-              </label>
-              <span className="font-display text-[22px] font-semibold tabular-nums text-ink">{tonnage.toLocaleString()} t</span>
-            </div>
-            <input
-              id="tonnage"
-              type="range"
-              min="20"
-              max="5000"
-              step="10"
-              value={tonnage}
-              onChange={(e) => setTonnage(Number(e.target.value))}
-              className="mt-5 h-1 w-full cursor-pointer appearance-none bg-line accent-brand"
-            />
-            <div className="mt-8 grid grid-cols-2 gap-px bg-line">
-              <div className="bg-white pr-4">
-                <p className="text-[13px] text-muted">Indicative detailing hours</p>
-                <p className="mt-1 font-display text-[28px] font-semibold tabular-nums tracking-[-0.02em] text-accent-dark">
-                  {estimatedHours.toLocaleString()}
-                </p>
-              </div>
-              <div className="bg-white pl-6">
-                <p className="text-[13px] text-muted">Indicative budget (USD)</p>
-                <p className="mt-1 font-display text-[28px] font-semibold tabular-nums tracking-[-0.02em] text-green-dark">
-                  ${estimatedCost.toLocaleString()}
-                </p>
-              </div>
-            </div>
-            <p className="mt-5 text-[12px] text-muted">Indicative only. Final pricing depends on scope, complexity and schedule.</p>
-          </div>
+          <p className="mt-2 text-[15px] text-muted">Send us your project specifications and our engineering team will respond promptly.</p>
 
           <form onSubmit={handleSubmit} className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div className="sm:col-span-2">

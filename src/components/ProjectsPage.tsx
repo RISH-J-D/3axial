@@ -12,7 +12,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigateHome, onOp
     <div className="bg-white">
       <PageHeader
         title="Selected structural steel projects."
-        subtitle="More than 800 structural and miscellaneous steel detailing projects delivered across the United States, Canada, Europe and Asia."
+        subtitle="More than 1200 structural and miscellaneous steel detailing projects delivered across the United States, Canada, Europe and Asia."
         badge="Portfolio"
         currentTab="Projects"
         image="/blueprint-bg.jpg"

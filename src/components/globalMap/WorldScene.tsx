@@ -24,10 +24,10 @@ export type SiteDef = { city: string; country: string; lon: number; lat: number;
 const HQ_DEF = { city: 'Bengaluru', country: 'India', lon: 77.59, lat: 12.97 };
 
 const COLOR = {
-  land: '#F47106',
-  coast: '#C45500',
-  landSide: '#B85200',
-  border: '#FFD3AD',
+  land: '#1270F9',
+  coast: '#0A52BC',
+  landSide: '#084094',
+  border: '#A8D0FE',
   graticule: '#DDE2E9',
   ink: '#14213D',
   steel: '#424C5B',

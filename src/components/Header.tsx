@@ -59,7 +59,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onOpenE
             <img
               src="/uploads/2025/07/3axial-Elements.jpg"
               alt="AISC Associate Member"
-              className="h-9 w-auto object-contain opacity-80 transition-opacity hover:opacity-100"
+              className="h-9 w-auto object-contain transition-opacity"
             />
             <img
               src="/uploads/2025/07/nisd-logo.png"
@@ -70,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onOpenE
         </button>
 
         {/* Desktop navigation */}
-        <nav className="hidden h-full items-stretch gap-7 xl:flex" aria-label="Primary">
+        <nav className="flex h-full items-stretch gap-7" aria-label="Primary">
           {NAV_ITEMS.map((item) => {
             const isActive = activeTab === item.id;
             return (
@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({ activeTab, setActiveTab, onOpenE
                 key={item.id}
                 onClick={() => go(item.id)}
                 className={`group relative flex items-center whitespace-nowrap text-[13px] font-medium tracking-[0.02em] transition-colors ${
-                  isActive ? 'text-ink' : 'text-muted hover:text-ink'
+                  isActive ? 'text-white' : 'text-white hover:text-white'
                 }`}
                 aria-current={isActive ? 'page' : undefined}
               >

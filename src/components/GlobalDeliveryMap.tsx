@@ -28,7 +28,7 @@ const noop = () => {};
 export const GlobalDeliveryMap: React.FC = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const labelRefs = useRef<(HTMLElement | null)[]>([]);
-  const [load, setLoad] = useState(false);
+  const [load, setLoad] = useState(true);
   const [active, setActive] = useState(false);
 
   useEffect(() => {
@@ -49,8 +49,8 @@ export const GlobalDeliveryMap: React.FC = () => {
       <div className="container-x">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
           <motion.div {...reveal} className="lg:col-span-5">
-            <span className="eyebrow eyebrow-orange">Global Delivery</span>
-            <h2 className="h-section mt-6 lg:mt-4 lg:text-[44px]">Aligned with your <em className="text-accent-dark">working day.</em></h2>
+            <span className="eyebrow">Global Delivery</span>
+            <h2 className="h-section mt-6 lg:mt-4 lg:text-[44px]">Aligned with your <em className="text-brand">working day.</em></h2>
           </motion.div>
           <motion.p {...reveal} className="lead lg:col-span-6 lg:col-start-7 lg:pt-8">
             Our dual-shift engineering teams overlap with office hours across North America, Europe and

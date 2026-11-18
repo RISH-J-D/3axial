@@ -11,7 +11,7 @@ export const BlogPage: React.FC<BlogPageProps> = ({ onNavigateHome }) => {
     <div className="bg-white">
       <PageHeader
         title="Engineering insights."
-        subtitle="Perspectives on Tekla modelling workflows, connection design automation, AISC/CISC standards and construction technology."
+        subtitle="Perspectives on Tekla modelling workflows, connection design automation, AISC/CISC/MM standards and construction technology."
         badge="Insights"
         currentTab="Insights"
         image="/vision-3d.png"

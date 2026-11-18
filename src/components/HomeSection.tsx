@@ -54,7 +54,7 @@ const CORE_SERVICES = [
 ];
 
 const WHY_PILLARS = [
-  { title: 'Compliance with global standards', desc: 'AISC, CISC, Eurocode and AS 4100 requirements built into every model and sheet.' },
+  { title: 'Compliance with global standards', desc: 'AISC, CISC, MM, Eurocode and AS 4100 requirements built into every model and sheet.' },
   { title: 'On-time delivery', desc: 'Milestone-driven schedules with transparent progress reporting at every submission.' },
   { title: 'Transparent collaboration', desc: 'RFIs, revisions and approvals tracked openly with your project managers.' },
   { title: 'Cost-efficient solutions', desc: 'Competitive pricing without compromise on checking or drawing quality.' },
@@ -113,7 +113,7 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
           <motion.div {...reveal} className="space-y-6 lg:col-span-7 lg:pt-10">
             <p className="text-[19px] leading-[1.65] text-ink">
               3 Axial is a steel detailing firm headquartered in Bengaluru, delivering reliable, detail-oriented
-              engineering to clients around the world. Across more than 800 projects, we have worked in every
+              engineering to clients around the world. Across more than 1200 projects, we have worked in every
               construction segment — industrial, commercial, residential, infrastructure, stadia and power plants.
             </p>
             <p className="lead">
@@ -133,18 +133,17 @@ export const HomeSection: React.FC<HomeSectionProps> = ({ onOpenEnquire, onNavig
         <div className="container-x mt-20">
           <div className="grid grid-cols-2 border-t border-line lg:grid-cols-4">
             {[
-              { n: '6+', l: 'Years in operation' },
-              { n: '800+', l: 'Projects delivered' },
+              { n: '9+', l: 'Years of experience' },
+              { n: '1200+', l: 'Projects delivered' },
               { n: '5+', l: 'Countries served' },
-              { n: '20+', l: 'Long-term clients' }
+              { n: '30+', l: 'Long-term clients' }
             ].map((s, i) => (
               <motion.div
                 key={s.l}
                 {...reveal}
                 transition={{ ...reveal.transition, delay: i * 0.06 }}
-                className={`border-line pt-8 pb-2 ${i % 2 === 1 ? 'border-l pl-6' : ''} ${i > 0 ? 'lg:border-l lg:pl-8' : ''} ${
-                  i >= 2 ? 'mt-8 border-t lg:mt-0 lg:border-t-0' : ''
-                }`}
+                className={`border-line pt-8 pb-2 ${i % 2 === 1 ? 'border-l pl-6' : ''} ${i > 0 ? 'lg:border-l lg:pl-8' : ''} ${i >= 2 ? 'mt-8 border-t lg:mt-0 lg:border-t-0' : ''
+                  }`}
               >
                 <div className={`font-display text-[48px] font-semibold leading-none tracking-[-0.03em] sm:text-[64px] ${tone(i).text}`}>
                   <CountUp value={s.n} />

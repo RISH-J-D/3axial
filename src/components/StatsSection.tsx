@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 import { CountUp } from './CountUp';
 
 const STATS = [
-  { number: '25+', label: 'Years experience', desc: 'Combined leadership expertise in AISC/CISC structural detailing' },
-  { number: '800+', label: 'Successful projects', desc: 'Commercial towers, industrial plants and stadium framing' },
+  { number: '9+', label: 'Years experience', desc: 'Combined leadership expertise in AISC/CISC/MM structural detailing' },
+  { number: '1200+', label: 'Successful projects', desc: 'Commercial towers, industrial plants and stadium framing' },
   { number: '15+', label: 'Countries served', desc: 'USA, Canada, Australia, Europe and Asia Pacific' },
   { number: '100+', label: 'Clients', desc: 'Long-term fabricator and contractor partnerships' }
 ];
@@ -20,9 +20,8 @@ export const StatsSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.06 }}
           viewport={{ once: true }}
-          className={`border-line py-8 sm:pr-6 ${index > 0 ? 'border-t sm:border-t-0' : ''} ${
-            index % 2 === 1 ? 'sm:border-l sm:pl-6' : ''
-          } ${index > 0 ? 'lg:border-l lg:pl-8' : ''} ${index >= 2 ? 'sm:border-t lg:border-t-0' : ''}`}
+          className={`border-line py-8 sm:pr-6 ${index > 0 ? 'border-t sm:border-t-0' : ''} ${index % 2 === 1 ? 'sm:border-l sm:pl-6' : ''
+            } ${index > 0 ? 'lg:border-l lg:pl-8' : ''} ${index >= 2 ? 'sm:border-t lg:border-t-0' : ''}`}
         >
           <div className={`font-display text-[52px] font-semibold leading-none tracking-[-0.03em] ${tone(index).text}`}>
             <CountUp value={item.number} />

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 interface CountUpProps {
-  // A figure such as "800+", "24/7" or "AISC · CISC". Only a leading integer is animated.
+  // A figure such as "1200+", "24/7" or "AISC · CISC". Only a leading integer is animated.
   value: string;
   duration?: number;
   className?: string;

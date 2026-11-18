@@ -3,6 +3,7 @@ import React from 'react';
 const ITEMS = [
   'AISC 303 & 360',
   'CISC',
+  'MM Standards',
   'Eurocode 3',
   'AS 4100',
   'BS 5950',

@@ -96,16 +96,41 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenEnquire }) =
           </ul>
         </div>
 
-        {/* Contact */}
+        {/* Contact & Offices */}
         <div className="lg:col-span-3">
-          <h4 className={`${heading} text-green`}>Office</h4>
-          <address className="mt-6 text-[14px] not-italic leading-[1.75]">
-            17B, 3rd Floor, Tech Mahindra Road
-            <br />
-            Electronic City Phase 2
-            <br />
-            Bengaluru 560100, India
-          </address>
+          <h4 className={`${heading} text-green`}>Offices</h4>
+          <div className="mt-6 space-y-4 text-[13px]">
+            <div>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/50">United States</span>
+              <address className="mt-1 not-italic leading-[1.6] text-white/80">
+                <span className="font-medium text-white">3 Axial Steel Detailing Services LLC</span>
+                <br />
+                5900 Balcones Dr Ste 100
+                <br />
+                Austin, TX 78731
+              </address>
+            </div>
+            <div>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/50">Bengaluru Headquarters</span>
+              <address className="mt-1 not-italic leading-[1.6] text-white/80">
+                17B, 3rd Floor, Tech Mahindra Road
+                <br />
+                Electronic City Phase 2
+                <br />
+                Bengaluru 560100, India
+              </address>
+            </div>
+            <div>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/50">Coimbatore Office</span>
+              <address className="mt-1 not-italic leading-[1.6] text-white/80">
+                Door No 438 A, 1st Floor, Kamarajar Rd
+                <br />
+                Peelamedu, Lakshmipuram
+                <br />
+                Coimbatore 641004, India
+              </address>
+            </div>
+          </div>
           <div className="mt-6 space-y-2 text-[14px]">
             <a href="tel:+16506956923" className="block text-white transition-colors hover:text-accent">
               +1 650 695 6923

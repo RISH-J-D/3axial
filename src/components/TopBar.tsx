@@ -41,12 +41,14 @@ export const TopBar: React.FC = () => {
           </a>
           <span className="hidden items-center gap-2 lg:flex">
             <MapPin className="h-3.5 w-3.5 text-logo" strokeWidth={1.75} />
-            <span className="tracking-[0.02em]">Bengaluru, India · Serving North America, Europe & Australia</span>
+            <span className="tracking-[0.02em]">Austin, TX · Bengaluru · Coimbatore · Serving North America, Europe & Australia</span>
           </span>
         </div>
 
         <div className="flex items-center gap-5">
-          <span className="hidden text-[10px] font-medium uppercase tracking-[0.2em] text-white/40 md:block">AISC Associate Member</span>
+          <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-white md:block">
+            AISC Associate Member
+          </span>
           <span className="hidden h-3 w-px bg-white/15 md:block" />
           <div className="flex items-center gap-4">
             {SOCIALS.map((s) => (

@@ -20,10 +20,10 @@ export const TeamSection: React.FC = () => {
               key={member.id}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: (idx < 3 ? idx : idx - 3) * 0.06 }}
+              transition={{ duration: 0.5, delay: (idx < 4 ? idx : idx - 4) * 0.06 }}
               viewport={{ once: true }}
-              // lg: 3 centred on top, 4 below
-              className={`group lg:col-span-2 ${idx === 0 ? 'lg:col-start-2' : ''}`}
+              // lg: 4 on top, 3 centred below
+              className={`group lg:col-span-2 ${idx === 4 ? 'lg:col-start-2' : ''}`}
             >
               <div className="aspect-[4/5] overflow-hidden bg-surface">
                 <img

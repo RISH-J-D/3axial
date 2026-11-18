@@ -22,7 +22,7 @@ const SERVICES = [
     title: 'Structural Steel Detailing',
     tag: 'Core Detailing',
     paragraphs: [
-      'We provide structural steel detailing services for all kind of structures in imperial and metric in accordance with AISC, CISC & BS stipulations. 3 Axial offers a complete line of detailing services using Tekla.',
+      'We provide structural steel detailing services for all kind of structures in imperial and metric in accordance with AISC, CISC, MM & BS stipulations. 3 Axial offers a complete line of detailing services using Tekla.',
       'We understand and visualize the complexity of projects, specific real time fabrication issues and adapt in detailing of shop &GA drawings to enhance the efficacy of the project managers/fabricators to complete the projects successfully within the schedule.',
       'With 3 Axial, you get more than drawings — you get expert insight, tailored solutions, and detailing that elevates your project’s success.'
     ]
